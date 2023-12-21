@@ -18,7 +18,6 @@ class ClubMapperTest {
     ClubMapper clubMapper;
 
     Club club;
-    //GetClubResponse getClubResponse;
     PutClubRequest putClubRequest;
 
     @BeforeEach
