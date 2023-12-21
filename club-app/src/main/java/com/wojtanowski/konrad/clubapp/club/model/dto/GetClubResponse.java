@@ -1,24 +1,18 @@
-package com.wojtanowski.konrad.clubapp.club.model.entity;
+package com.wojtanowski.konrad.clubapp.club.model.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import lombok.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.util.UUID;
 
-@Entity
-//@Table(name = "clubs")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Club {
-    @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class GetClubResponse {
     private UUID id;
 
     @NotNull

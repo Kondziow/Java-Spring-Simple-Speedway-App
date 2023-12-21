@@ -14,7 +14,7 @@
 	<name>club-app</name>
 	<description>Club application</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 		<org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
 	</properties>
 
