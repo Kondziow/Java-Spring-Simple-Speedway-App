@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Primary
 @Service
@@ -21,5 +23,10 @@ public class ClubServiceJPA implements ClubService {
     @Override
     public List<Club> getAllClubs() {
         return clubRepository.findAll();
+    }
+
+    @Override
+    public Optional<Club> getClubById(UUID clubId) {
+        return clubRepository.findById(clubId);
     }
 }
