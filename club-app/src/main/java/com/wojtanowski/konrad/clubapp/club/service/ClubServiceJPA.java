@@ -61,4 +61,13 @@ public class ClubServiceJPA implements ClubService {
 
         return atomicReference.get();
     }
+
+    @Override
+    public Boolean deleteClubById(UUID clubId) {
+        if (clubRepository.existsById(clubId)) {
+            clubRepository.deleteById(clubId);
+            return true;
+        }
+        return false;
+    }
 }

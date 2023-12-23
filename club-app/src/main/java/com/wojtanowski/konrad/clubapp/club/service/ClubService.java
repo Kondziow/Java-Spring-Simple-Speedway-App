@@ -17,4 +17,6 @@ public interface ClubService {
     GetClubResponse saveNewClub(@Valid PostClubRequest club);
 
     Optional<GetClubResponse> updateClubById(UUID clubId, @Valid PutClubRequest club);
+
+    Boolean deleteClubById(UUID clubId);
 }

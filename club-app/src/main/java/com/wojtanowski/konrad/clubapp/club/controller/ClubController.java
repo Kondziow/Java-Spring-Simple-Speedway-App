@@ -64,4 +64,13 @@ public class ClubController {
 
         return new ResponseEntity<>(getClubResponse.get(), HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping(CLUB_PATH_ID)
+    public ResponseEntity<Void> deleteClubById(@PathVariable("clubId") UUID clubId) {
+        if (!clubService.deleteClubById(clubId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -1,12 +1,14 @@
 package com.wojtanowski.konrad.clubapp.club.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import  com.fasterxml.jackson.databind.ObjectMapper;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import com.wojtanowski.konrad.clubapp.club.service.ClubService;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,9 +19,11 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -34,6 +38,9 @@ class ClubControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Captor
+    ArgumentCaptor<UUID> uuidArgumentCaptor;
 
 
     @Test
@@ -87,7 +94,7 @@ class ClubControllerTest {
     }
 
     @Test
-    void testPostClubNullNameNullCity() throws Exception {
+    void testPostClubBadDto() throws Exception {
         Club club = Club.builder().build();
         given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
 
@@ -135,6 +142,28 @@ class ClubControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(putClubRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testDeleteClubById() throws Exception{
+        given(clubService.deleteClubById(any())).willReturn(true);
+
+        mockMvc.perform(delete(ClubController.CLUB_PATH_ID, getClub1().getId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(clubService).deleteClubById(uuidArgumentCaptor.capture());
+
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(getClub1().getId());
+    }
+
+    @Test
+    void testDeleteClubByIdNotFound()  throws Exception {
+        given(clubService.deleteClubById(any())).willReturn(false);
+
+        mockMvc.perform(delete(ClubController.CLUB_PATH_ID, UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
