@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wojtanowski.konrad.clubapp.club.mapper.ClubMapper;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
+import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import com.wojtanowski.konrad.clubapp.club.repository.ClubRepository;
 import com.wojtanowski.konrad.clubapp.club.service.ClubService;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -71,5 +74,26 @@ class ClubControllerIT {
     @Test
     void testGetClubByIdNotFound() {
         assertThrows(ResponseStatusException.class, () -> clubController.getClubById(UUID.randomUUID()));
+    }
+
+    @Test
+    void testPostClub() {
+        PostClubRequest club = PostClubRequest.builder()
+                .city("c")
+                .name("n")
+                .build();
+
+        ResponseEntity<GetClubResponse> response = clubController.postClub(club);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getHeaders()).isNotNull();
+
+        String[] locationUUID = response.getHeaders().getLocation().getPath().split("/");
+        UUID savedUUID = UUID.fromString(locationUUID[4]);
+
+        Club found = clubRepository.findById(savedUUID).get();
+        assertThat(found).isNotNull();
+        assertThat(found.getName()).isEqualTo(found.getName());
+        assertThat(found.getCity()).isEqualTo(found.getCity());
     }
 }

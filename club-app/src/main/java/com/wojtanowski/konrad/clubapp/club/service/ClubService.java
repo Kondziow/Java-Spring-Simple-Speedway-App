@@ -1,13 +1,18 @@
 package com.wojtanowski.konrad.clubapp.club.service;
 
-import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
+import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
+import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
+import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
+import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
+import jakarta.validation.Valid;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface ClubService {
-    List<Club> getAllClubs();
+    GetClubsResponse getAllClubs();
 
-    Optional<Club> getClubById(UUID clubId);
+    Optional<GetClubResponse> getClubById(UUID clubId);
+
+    GetClubResponse saveNewClub(@Valid PostClubRequest club);
 }

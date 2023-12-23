@@ -1,32 +1,47 @@
 package com.wojtanowski.konrad.clubapp.club.service;
 
+import com.wojtanowski.konrad.clubapp.club.mapper.ClubMapper;
+import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
+import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
+import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import com.wojtanowski.konrad.clubapp.club.repository.ClubRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Primary
 @Service
 @Validated
 @RequiredArgsConstructor
 public class ClubServiceJPA implements ClubService {
-    @Autowired
-    ClubRepository clubRepository;
+    private final ClubRepository clubRepository;
+    private final ClubMapper clubMapper;
 
     @Override
-    public List<Club> getAllClubs() {
-        return clubRepository.findAll();
+    public GetClubsResponse getAllClubs() {
+
+        return GetClubsResponse.builder()
+                .clubs(clubRepository.findAll().stream()
+                        .map(clubMapper::clubToGetClubResponse)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
-    public Optional<Club> getClubById(UUID clubId) {
-        return clubRepository.findById(clubId);
+    public Optional<GetClubResponse> getClubById(UUID clubId) {
+        Optional<Club> found = clubRepository.findById(clubId);
+
+        return found.map(clubMapper::clubToGetClubResponse);
+    }
+
+    @Override
+    public GetClubResponse saveNewClub(PostClubRequest club) {
+        return clubMapper.clubToGetClubResponse(clubRepository.save(clubMapper.postClubRequestToClub(club)));
     }
 }

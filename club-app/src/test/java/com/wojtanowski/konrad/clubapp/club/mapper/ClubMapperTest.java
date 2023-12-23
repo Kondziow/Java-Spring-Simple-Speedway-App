@@ -1,6 +1,7 @@
 package com.wojtanowski.konrad.clubapp.club.mapper;
 
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
+import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ class ClubMapperTest {
 
     Club club;
     PutClubRequest putClubRequest;
+    PostClubRequest postClubRequest;
 
     @BeforeEach
     void setUp() {
@@ -31,6 +33,11 @@ class ClubMapperTest {
         putClubRequest = PutClubRequest.builder()
                 .city("c2")
                 .name("n2")
+                .build();
+
+        postClubRequest = PostClubRequest.builder()
+                .city("c3")
+                .name("n3")
                 .build();
     }
 
@@ -49,5 +56,13 @@ class ClubMapperTest {
 
         assertEquals(mapped.getCity(), putClubRequest.getCity());
         assertEquals(mapped.getName(), putClubRequest.getName());
+    }
+
+    @Test
+    void testPostClubRequestToClub() {
+        Club mapped = clubMapper.postClubRequestToClub(postClubRequest);
+
+        assertEquals(mapped.getCity(), postClubRequest.getCity());
+        assertEquals(mapped.getName(), postClubRequest.getName());
     }
 }

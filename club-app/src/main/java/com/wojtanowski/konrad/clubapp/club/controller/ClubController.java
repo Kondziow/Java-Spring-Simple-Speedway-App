@@ -3,14 +3,15 @@ package com.wojtanowski.konrad.clubapp.club.controller;
 import com.wojtanowski.konrad.clubapp.club.mapper.ClubMapper;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
+import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import com.wojtanowski.konrad.clubapp.club.service.ClubService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -28,26 +29,29 @@ public class ClubController {
 
     @GetMapping(CLUB_PATH)
     public ResponseEntity<GetClubsResponse> getAllClubs() {
-        return ResponseEntity.ok(GetClubsResponse.builder()
-                .clubs(clubService.getAllClubs().stream()
-                        .map(clubMapper::clubToGetClubResponse)
-                        .collect(Collectors.toList()))
-                .build());
+        return ResponseEntity.ok(clubService.getAllClubs());
     }
 
     @GetMapping(CLUB_PATH_ID)
     public ResponseEntity<GetClubResponse> getClubById(@PathVariable("clubId")UUID clubId) {
-        Optional<Club> foundClubOptional = clubService.getClubById(clubId);
+        Optional<GetClubResponse> foundClubOptional = clubService.getClubById(clubId);
 
         if (foundClubOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
-        Club foundClub = foundClubOptional.get();
-
-        GetClubResponse clubResponse = clubMapper.clubToGetClubResponse(foundClub);
-        System.out.println("clubResponse: " + clubResponse); // Dodaj tę linię
+        GetClubResponse clubResponse = foundClubOptional.get();
 
         return new ResponseEntity<>(clubResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(CLUB_PATH)
+    public ResponseEntity<GetClubResponse> postClub(@Validated @RequestBody PostClubRequest club) {
+        GetClubResponse savedClub = clubService.saveNewClub(club);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", CLUB_PATH + "/" + savedClub.getId().toString());
+
+        return new ResponseEntity<>(savedClub , headers, HttpStatus.CREATED);
     }
 }

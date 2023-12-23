@@ -1,7 +1,8 @@
 package com.wojtanowski.konrad.clubapp.club.controller;
 
-import com.wojtanowski.konrad.clubapp.club.mapper.ClubMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
+import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import com.wojtanowski.konrad.clubapp.club.service.ClubService;
 import org.junit.jupiter.api.Test;
@@ -30,14 +31,14 @@ class ClubControllerTest {
     @MockBean
     ClubService clubService;
 
-    @MockBean
-    ClubMapper clubMapper;
+    @Autowired
+    ObjectMapper objectMapper;
 
 
     @Test
     void testGetAllClubs() throws Exception {
         given(clubService.getAllClubs())
-                .willReturn(Arrays.asList(getClub1(), getClub2()));
+                .willReturn(GetClubsResponse.builder().clubs( Arrays.asList(getClubResponse1(), getClubResponse2())).build());
 
         mockMvc.perform(get(ClubController.CLUB_PATH))
                 .andExpect(status().isOk())
@@ -49,8 +50,8 @@ class ClubControllerTest {
     @Test
     void testGetClubById() throws Exception {
         Club club = getClub1();
-        given(clubService.getClubById(any())).willReturn(Optional.of(club));
-        given(clubMapper.clubToGetClubResponse(any())).willReturn(getClubResponse1());
+        GetClubResponse clubResponse = getClubResponse1();
+        given(clubService.getClubById(any())).willReturn(Optional.of(clubResponse));
 
         mockMvc.perform(get(ClubController.CLUB_PATH_ID, club.getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -66,8 +67,34 @@ class ClubControllerTest {
         given(clubService.getClubById(any())).willReturn(Optional.empty());
 
         mockMvc.perform(get(ClubController.CLUB_PATH_ID, UUID.randomUUID())
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testPostClub() throws Exception {
+        Club club = getClub1();
+        GetClubResponse clubResponse = getClubResponse1();
+        given(clubService.saveNewClub(any())).willReturn(clubResponse);
+
+        mockMvc.perform(post(ClubController.CLUB_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"));
+    }
+
+    @Test
+    void testPostClubNullNameNullCity() throws Exception {
+        Club club = Club.builder().build();
+        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+
+        mockMvc.perform(post(ClubController.CLUB_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isBadRequest());
     }
 
     private Club getClub1() {
@@ -86,9 +113,9 @@ class ClubControllerTest {
                 .build();
     }
 
-    private Club getClub2() {
-        return Club.builder()
-                .id(UUID.randomUUID())
+    private GetClubResponse getClubResponse2() {
+        return GetClubResponse.builder()
+                .id(UUID.fromString("9ed6dcfb-d972-4f2e-b3ba-5337295f5d1f"))
                 .city("ClubCity2")
                 .name("ClubName2")
                 .build();
