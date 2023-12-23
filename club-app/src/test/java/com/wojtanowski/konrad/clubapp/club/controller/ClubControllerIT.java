@@ -113,7 +113,7 @@ class ClubControllerIT {
                 .build();
 
         ResponseEntity<GetClubResponse> responseEntity = clubController.putClubById(club.getId(), putClubRequest);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         Club updatedClub = clubRepository.findById(club.getId()).get();
         assertThat(updatedClub.getName()).isEqualTo("UPDATED");

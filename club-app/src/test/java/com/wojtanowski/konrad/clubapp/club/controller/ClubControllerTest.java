@@ -115,7 +115,7 @@ class ClubControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(putClubRequest)))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.city", is(putClubRequest.getCity())))
                 .andExpect(jsonPath("$.name", is(putClubRequest.getName())));

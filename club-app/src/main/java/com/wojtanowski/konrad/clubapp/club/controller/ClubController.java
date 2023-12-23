@@ -62,7 +62,9 @@ public class ClubController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(getClubResponse.get(), HttpStatus.NO_CONTENT);
+        GetClubResponse response = getClubResponse.get();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping(CLUB_PATH_ID)
