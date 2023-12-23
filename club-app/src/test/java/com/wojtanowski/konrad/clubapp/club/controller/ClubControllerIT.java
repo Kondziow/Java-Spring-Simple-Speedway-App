@@ -5,9 +5,11 @@ import com.wojtanowski.konrad.clubapp.club.mapper.ClubMapper;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
+import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import com.wojtanowski.konrad.clubapp.club.repository.ClubRepository;
 import com.wojtanowski.konrad.clubapp.club.service.ClubService;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -94,5 +97,37 @@ class ClubControllerIT {
         assertThat(found).isNotNull();
         assertThat(found.getName()).isEqualTo(club.getName());
         assertThat(found.getCity()).isEqualTo(club.getCity());
+    }
+
+    @Test
+    void testUpdateClubById() {
+        Club club = clubRepository.findAll().get(0);
+        PutClubRequest putClubRequest = PutClubRequest.builder()
+                .city(club.getCity())
+                .name("UPDATED")
+                .build();
+
+        ResponseEntity<GetClubResponse> responseEntity = clubController.putClubById(club.getId(), putClubRequest);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        Club updatedClub = clubRepository.findById(club.getId()).get();
+        assertThat(updatedClub.getName()).isEqualTo("UPDATED");
+        assertThat(updatedClub.getCity()).isEqualTo(club.getCity());
+    }
+
+    @Test
+    void testUpdateClubByIdBadDto() {
+        Club club = clubRepository.findAll().get(0);
+        PutClubRequest putClubRequest = PutClubRequest.builder().build();
+        assertThrows(ConstraintViolationException.class, () -> clubController.putClubById(club.getId(), putClubRequest));
+    }
+
+    @Test
+    void testUpdateClubByIdNotFound() {
+        PutClubRequest putClubRequest = PutClubRequest.builder()
+                .city("c")
+                .name("n")
+                .build();
+        assertThrows(ResponseStatusException.class, () -> clubController.putClubById(UUID.randomUUID(), putClubRequest));
     }
 }

@@ -3,6 +3,7 @@ package com.wojtanowski.konrad.clubapp.club.controller;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
+import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import com.wojtanowski.konrad.clubapp.club.service.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -29,7 +30,7 @@ public class ClubController {
     }
 
     @GetMapping(CLUB_PATH_ID)
-    public ResponseEntity<GetClubResponse> getClubById(@PathVariable("clubId")UUID clubId) {
+    public ResponseEntity<GetClubResponse> getClubById(@PathVariable("clubId") UUID clubId) {
         Optional<GetClubResponse> foundClubOptional = clubService.getClubById(clubId);
 
         if (foundClubOptional.isEmpty()) {
@@ -48,6 +49,19 @@ public class ClubController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", CLUB_PATH + "/" + savedClub.getId().toString());
 
-        return new ResponseEntity<>(savedClub , headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedClub, headers, HttpStatus.CREATED);
+    }
+
+    @PutMapping(CLUB_PATH_ID)
+    public ResponseEntity<GetClubResponse> putClubById(
+            @PathVariable("clubId") UUID clubId,
+            @Validated @RequestBody PutClubRequest club
+    ) {
+        Optional<GetClubResponse> getClubResponse = clubService.updateClubById(clubId, club);
+        if (getClubResponse.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(getClubResponse.get(), HttpStatus.NO_CONTENT);
     }
 }
