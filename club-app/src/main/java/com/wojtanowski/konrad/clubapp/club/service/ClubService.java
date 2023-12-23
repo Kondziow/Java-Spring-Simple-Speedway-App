@@ -3,7 +3,6 @@ package com.wojtanowski.konrad.clubapp.club.service;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
-import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import jakarta.validation.Valid;
 
 import java.util.Optional;
