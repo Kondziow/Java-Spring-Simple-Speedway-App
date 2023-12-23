@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -93,7 +92,7 @@ class ClubControllerIT {
 
         Club found = clubRepository.findById(savedUUID).get();
         assertThat(found).isNotNull();
-        assertThat(found.getName()).isEqualTo(found.getName());
-        assertThat(found.getCity()).isEqualTo(found.getCity());
+        assertThat(found.getName()).isEqualTo(club.getName());
+        assertThat(found.getCity()).isEqualTo(club.getCity());
     }
 }
