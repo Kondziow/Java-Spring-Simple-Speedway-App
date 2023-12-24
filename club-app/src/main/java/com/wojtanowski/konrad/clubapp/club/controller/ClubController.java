@@ -72,7 +72,6 @@ public class ClubController {
         if (!clubService.deleteClubById(clubId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

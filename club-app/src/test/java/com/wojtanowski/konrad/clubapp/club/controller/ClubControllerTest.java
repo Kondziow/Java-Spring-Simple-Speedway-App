@@ -1,6 +1,6 @@
 package com.wojtanowski.konrad.clubapp.club.controller;
 
-import  com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
@@ -94,8 +94,50 @@ class ClubControllerTest {
     }
 
     @Test
-    void testPostClubBadDto() throws Exception {
-        Club club = Club.builder().build();
+    void testPostClubNullName() throws Exception {
+        Club club = Club.builder().city("c").build();
+        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+
+        mockMvc.perform(post(ClubController.CLUB_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPostClubNullCity() throws Exception {
+        Club club = Club.builder().name("n").build();
+        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+
+        mockMvc.perform(post(ClubController.CLUB_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPostClubTooLongName() throws Exception {
+        Club club = Club.builder()
+                .name("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+                .city("c")
+                .build();
+        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+
+        mockMvc.perform(post(ClubController.CLUB_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPostClubTooLongCity() throws Exception {
+        Club club = Club.builder()
+                .name("n")
+                .city("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
+                .build();
         given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
 
         mockMvc.perform(post(ClubController.CLUB_PATH)
@@ -122,8 +164,50 @@ class ClubControllerTest {
     }
 
     @Test
-    void testPutClubByIdBadDto() throws Exception {
-        Club club = Club.builder().build();
+    void testPutClubByIdNullName() throws Exception {
+        Club club = Club.builder().city("c").build();
+        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+
+        mockMvc.perform(put(ClubController.CLUB_PATH_ID, getClub1().getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPutClubByIdNullCity() throws Exception {
+        Club club = Club.builder().name("n").build();
+        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+
+        mockMvc.perform(put(ClubController.CLUB_PATH_ID, getClub1().getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPutClubByIdTooLongName() throws Exception {
+        Club club = Club.builder()
+                .name("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+                .city("c")
+                .build();
+        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+
+        mockMvc.perform(put(ClubController.CLUB_PATH_ID, getClub1().getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPutClubByIdTooLongCity() throws Exception {
+        Club club = Club.builder()
+                .name("n")
+                .city("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
+                .build();
         given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
 
         mockMvc.perform(put(ClubController.CLUB_PATH_ID, getClub1().getId())
@@ -146,11 +230,11 @@ class ClubControllerTest {
     }
 
     @Test
-    void testDeleteClubById() throws Exception{
+    void testDeleteClubById() throws Exception {
         given(clubService.deleteClubById(any())).willReturn(true);
 
         mockMvc.perform(delete(ClubController.CLUB_PATH_ID, getClub1().getId())
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
         verify(clubService).deleteClubById(uuidArgumentCaptor.capture());
@@ -159,11 +243,11 @@ class ClubControllerTest {
     }
 
     @Test
-    void testDeleteClubByIdNotFound()  throws Exception {
+    void testDeleteClubByIdNotFound() throws Exception {
         given(clubService.deleteClubById(any())).willReturn(false);
 
         mockMvc.perform(delete(ClubController.CLUB_PATH_ID, UUID.randomUUID())
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 

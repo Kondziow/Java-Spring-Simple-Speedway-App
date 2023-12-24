@@ -59,6 +59,7 @@ class ClubControllerIT {
     void testGetAllClubs() {
         GetClubsResponse clubs = clubController.getAllClubs().getBody();
 
+        assertThat(clubs).isNotNull();
         assertThat(clubs.getClubs()).isNotNull();
         assertThat(clubs.getClubs().size()).isEqualTo(8);
     }
@@ -93,6 +94,7 @@ class ClubControllerIT {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getHeaders()).isNotNull();
 
+        assertThat(response.getHeaders().getLocation()).isNotNull();
         String[] locationUUID = response.getHeaders().getLocation().getPath().split("/");
         UUID savedUUID = UUID.fromString(locationUUID[4]);
 
@@ -100,6 +102,36 @@ class ClubControllerIT {
         assertThat(found).isNotNull();
         assertThat(found.getName()).isEqualTo(club.getName());
         assertThat(found.getCity()).isEqualTo(club.getCity());
+    }
+
+    @Test
+    void testPostClubNullName() {
+        PostClubRequest postClubRequest = PostClubRequest.builder().city("c").build();
+        assertThrows(ConstraintViolationException.class, () -> clubController.postClub(postClubRequest));
+    }
+
+    @Test
+    void testPostClubNullCity() {
+        PostClubRequest postClubRequest = PostClubRequest.builder().name("n").build();
+        assertThrows(ConstraintViolationException.class, () -> clubController.postClub(postClubRequest));
+    }
+
+    @Test
+    void testPostClubTooLongName() {
+        PostClubRequest postClubRequest = PostClubRequest.builder()
+                .city("c")
+                .name("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+                .build();
+        assertThrows(ConstraintViolationException.class, () -> clubController.postClub(postClubRequest));
+    }
+
+    @Test
+    void testPostClubTooLongCity() {
+        PostClubRequest postClubRequest = PostClubRequest.builder()
+                .city("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
+                .name("n")
+                .build();
+        assertThrows(ConstraintViolationException.class, () -> clubController.postClub(postClubRequest));
     }
 
     @Rollback
@@ -121,9 +153,36 @@ class ClubControllerIT {
     }
 
     @Test
-    void testUpdateClubByIdBadDto() {
+    void testUpdateClubByIdNullName() {
         Club club = clubRepository.findAll().get(0);
-        PutClubRequest putClubRequest = PutClubRequest.builder().build();
+        PutClubRequest putClubRequest = PutClubRequest.builder().city("c").build();
+        assertThrows(ConstraintViolationException.class, () -> clubController.putClubById(club.getId(), putClubRequest));
+    }
+
+    @Test
+    void testUpdateClubByIdNullCity() {
+        Club club = clubRepository.findAll().get(0);
+        PutClubRequest putClubRequest = PutClubRequest.builder().name("n").build();
+        assertThrows(ConstraintViolationException.class, () -> clubController.putClubById(club.getId(), putClubRequest));
+    }
+
+    @Test
+    void testUpdateClubByIdTooLongName() {
+        Club club = clubRepository.findAll().get(0);
+        PutClubRequest putClubRequest = PutClubRequest.builder()
+                .city("c")
+                .name("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+                .build();
+        assertThrows(ConstraintViolationException.class, () -> clubController.putClubById(club.getId(), putClubRequest));
+    }
+
+    @Test
+    void testUpdateClubByIdTooLongCity() {
+        Club club = clubRepository.findAll().get(0);
+        PutClubRequest putClubRequest = PutClubRequest.builder()
+                .city("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
+                .name("n")
+                .build();
         assertThrows(ConstraintViolationException.class, () -> clubController.putClubById(club.getId(), putClubRequest));
     }
 
