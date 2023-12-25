@@ -10,5 +10,6 @@
     <modules>
         <module>club-app</module>
         <module>gateway-app</module>
+        <module>player-app</module>
     </modules>
 </project>

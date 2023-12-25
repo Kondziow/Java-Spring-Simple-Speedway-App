@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gateway-app" />
+        <module name="player-app" />
       </profile>
       <profile name="Annotation profile for parent-project" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -27,6 +28,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="club-app" options="-parameters -Amapstruct.defaultComponentModel=spring" />
       <module name="gateway-app" options="-parameters" />
+      <module name="player-app" options="-parameters" />
     </option>
   </component>
 </project>
