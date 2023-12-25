@@ -116,12 +116,13 @@ class ClubRepositoryTest {
         saved.setName("UPDATED");
 
         Club updated = clubRepository.save(saved);
+        clubRepository.flush();
 
-        assertThat(saved.getId()).isEqualTo(updated.getId());
-        assertThat(saved.getName()).isEqualTo(updated.getName());
-        assertThat(saved.getName()).isEqualTo("UPDATED");
-        assertThat(saved.getCity()).isEqualTo(updated.getCity());
-        assertThat(saved.getCity()).isEqualTo("c");
+        assertThat(updated.getId()).isEqualTo(saved.getId());
+        assertThat(updated.getName()).isEqualTo(saved.getName());
+        assertThat(updated.getName()).isEqualTo("UPDATED");
+        assertThat(updated.getCity()).isEqualTo(saved.getCity());
+        assertThat(updated.getCity()).isEqualTo("c");
     }
 
     @Test
