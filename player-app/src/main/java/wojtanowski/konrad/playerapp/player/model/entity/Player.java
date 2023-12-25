@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -34,5 +34,5 @@ public class Player {
     @Size(max = 50)
     private String surname;
 
-    private Date birthDate;
+    private LocalDate birthDate;
 }
