@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
-//@Table(name = "clubs")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
