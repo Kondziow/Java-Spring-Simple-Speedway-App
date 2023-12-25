@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -23,5 +24,5 @@ public class PostPlayerRequest {
     @Size(max = 50)
     private String surname;
 
-    private Date birthDate;
+    private LocalDate birthDate;
 }

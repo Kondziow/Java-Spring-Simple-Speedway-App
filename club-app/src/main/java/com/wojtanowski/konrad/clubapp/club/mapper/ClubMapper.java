@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface ClubMapper {
     GetClubResponse clubToGetClubResponse(Club club);
+
     Club putClubRequestToClub(PutClubRequest putClubRequest);
+
     Club postClubRequestToClub(PostClubRequest postClubRequest);
 }

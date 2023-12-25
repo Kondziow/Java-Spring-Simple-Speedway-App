@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -26,5 +27,5 @@ public class GetPlayerResponse {
     @Size(max = 50)
     private String surname;
 
-    private Date birthDate;
+    private LocalDate birthDate;
 }
