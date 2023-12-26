@@ -5,10 +5,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import wojtanowski.konrad.playerapp.player.mapper.PlayerMapper;
+import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
+import wojtanowski.konrad.playerapp.player.model.entity.Player;
 import wojtanowski.konrad.playerapp.player.repository.PlayerRepository;
 import wojtanowski.konrad.playerapp.player.service.api.PlayerService;
 
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Primary
@@ -26,5 +30,12 @@ public class PlayerServiceJPA implements PlayerService {
                         .map(playerMapper::playerToGetPlayerResponse)
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    @Override
+    public Optional<GetPlayerResponse> getPlayerById(UUID playerId) {
+        Optional<Player> found = playerRepository.findById(playerId);
+
+        return found.map(playerMapper::playerToGetPlayerResponse);
     }
 }

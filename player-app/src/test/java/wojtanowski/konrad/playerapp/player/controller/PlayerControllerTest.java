@@ -16,13 +16,12 @@ import wojtanowski.konrad.playerapp.player.service.api.PlayerService;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,6 +50,31 @@ class PlayerControllerTest {
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.players").isArray())
                     .andExpect(jsonPath("$.players.length()",is(2)));
+    }
+
+    @Test
+    void testGetPlayerById() throws Exception {
+        Player player = getPlayer1();
+        GetPlayerResponse playerResponse = getGetPlayerResponse1();
+        given(playerService.getPlayerById(any())).willReturn(Optional.of(playerResponse));
+
+        mockMvc.perform(get(PlayerController.PLAYER_PATH_ID, player.getId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(player.getId().toString())))
+                .andExpect(jsonPath("$.name", is(player.getName())))
+                .andExpect(jsonPath("$.surname", is(player.getSurname())))
+                .andExpect(jsonPath("$.birthDate", is(player.getBirthDate().toString())));
+    }
+
+    @Test
+    void testGetPlayerIdNotFound() throws Exception {
+        given(playerService.getPlayerById(any())).willReturn(Optional.empty());
+
+        mockMvc.perform(get(PlayerController.PLAYER_PATH_ID, UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     private Player getPlayer1() {
