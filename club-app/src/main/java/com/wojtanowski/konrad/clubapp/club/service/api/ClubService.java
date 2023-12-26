@@ -1,4 +1,4 @@
-package com.wojtanowski.konrad.clubapp.club.service;
+package com.wojtanowski.konrad.clubapp.club.service.api;
 
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;

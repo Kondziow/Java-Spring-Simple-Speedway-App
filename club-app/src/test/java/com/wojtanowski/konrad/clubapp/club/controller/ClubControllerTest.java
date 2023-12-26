@@ -5,7 +5,7 @@ import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
-import com.wojtanowski.konrad.clubapp.club.service.ClubService;
+import com.wojtanowski.konrad.clubapp.club.service.api.ClubService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -46,7 +46,7 @@ class ClubControllerTest {
     @Test
     void testGetAllClubs() throws Exception {
         given(clubService.getAllClubs())
-                .willReturn(GetClubsResponse.builder().clubs(Arrays.asList(getClubResponse1(), getClubResponse2())).build());
+                .willReturn(GetClubsResponse.builder().clubs(Arrays.asList(getGetClubResponse1(), getClubResponse2())).build());
 
         mockMvc.perform(get(ClubController.CLUB_PATH))
                 .andExpect(status().isOk())
@@ -58,7 +58,7 @@ class ClubControllerTest {
     @Test
     void testGetClubById() throws Exception {
         Club club = getClub1();
-        GetClubResponse clubResponse = getClubResponse1();
+        GetClubResponse clubResponse = getGetClubResponse1();
         given(clubService.getClubById(any())).willReturn(Optional.of(clubResponse));
 
         mockMvc.perform(get(ClubController.CLUB_PATH_ID, club.getId())
@@ -82,7 +82,7 @@ class ClubControllerTest {
     @Test
     void testPostClub() throws Exception {
         Club club = getClub1();
-        GetClubResponse clubResponse = getClubResponse1();
+        GetClubResponse clubResponse = getGetClubResponse1();
         given(clubService.saveNewClub(any())).willReturn(clubResponse);
 
         mockMvc.perform(post(ClubController.CLUB_PATH)
@@ -96,7 +96,7 @@ class ClubControllerTest {
     @Test
     void testPostClubNullName() throws Exception {
         Club club = Club.builder().city("c").build();
-        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+        given(clubService.saveNewClub(any())).willReturn(getGetClubResponse1());
 
         mockMvc.perform(post(ClubController.CLUB_PATH)
                         .accept(MediaType.APPLICATION_JSON)
@@ -108,7 +108,7 @@ class ClubControllerTest {
     @Test
     void testPostClubNullCity() throws Exception {
         Club club = Club.builder().name("n").build();
-        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+        given(clubService.saveNewClub(any())).willReturn(getGetClubResponse1());
 
         mockMvc.perform(post(ClubController.CLUB_PATH)
                         .accept(MediaType.APPLICATION_JSON)
@@ -123,7 +123,7 @@ class ClubControllerTest {
                 .name("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
                 .city("c")
                 .build();
-        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+        given(clubService.saveNewClub(any())).willReturn(getGetClubResponse1());
 
         mockMvc.perform(post(ClubController.CLUB_PATH)
                         .accept(MediaType.APPLICATION_JSON)
@@ -138,7 +138,7 @@ class ClubControllerTest {
                 .name("n")
                 .city("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
                 .build();
-        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+        given(clubService.saveNewClub(any())).willReturn(getGetClubResponse1());
 
         mockMvc.perform(post(ClubController.CLUB_PATH)
                         .accept(MediaType.APPLICATION_JSON)
@@ -149,7 +149,7 @@ class ClubControllerTest {
 
     @Test
     void testPutClubById() throws Exception {
-        GetClubResponse getClubResponse = getClubResponse1();
+        GetClubResponse getClubResponse = getGetClubResponse1();
         PutClubRequest putClubRequest = getPutClubRequest1();
         given(clubService.updateClubById(any(), any())).willReturn(Optional.of(getClubResponse));
 
@@ -166,7 +166,7 @@ class ClubControllerTest {
     @Test
     void testPutClubByIdNullName() throws Exception {
         Club club = Club.builder().city("c").build();
-        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+        given(clubService.saveNewClub(any())).willReturn(getGetClubResponse1());
 
         mockMvc.perform(put(ClubController.CLUB_PATH_ID, getClub1().getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -178,7 +178,7 @@ class ClubControllerTest {
     @Test
     void testPutClubByIdNullCity() throws Exception {
         Club club = Club.builder().name("n").build();
-        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+        given(clubService.saveNewClub(any())).willReturn(getGetClubResponse1());
 
         mockMvc.perform(put(ClubController.CLUB_PATH_ID, getClub1().getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -193,7 +193,7 @@ class ClubControllerTest {
                 .name("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
                 .city("c")
                 .build();
-        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+        given(clubService.saveNewClub(any())).willReturn(getGetClubResponse1());
 
         mockMvc.perform(put(ClubController.CLUB_PATH_ID, getClub1().getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -208,7 +208,7 @@ class ClubControllerTest {
                 .name("n")
                 .city("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
                 .build();
-        given(clubService.saveNewClub(any())).willReturn(getClubResponse1());
+        given(clubService.saveNewClub(any())).willReturn(getGetClubResponse1());
 
         mockMvc.perform(put(ClubController.CLUB_PATH_ID, getClub1().getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -259,7 +259,7 @@ class ClubControllerTest {
                 .build();
     }
 
-    private GetClubResponse getClubResponse1() {
+    private GetClubResponse getGetClubResponse1() {
         return GetClubResponse.builder()
                 .id(UUID.fromString("06653105-74a1-443f-83db-531faeb027d8"))
                 .city("ClubCity1")

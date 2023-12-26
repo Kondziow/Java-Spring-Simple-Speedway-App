@@ -4,7 +4,7 @@ import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
-import com.wojtanowski.konrad.clubapp.club.service.ClubService;
+import com.wojtanowski.konrad.clubapp.club.service.api.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

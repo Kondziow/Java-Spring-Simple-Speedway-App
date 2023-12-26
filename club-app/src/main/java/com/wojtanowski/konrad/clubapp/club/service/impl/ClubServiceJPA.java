@@ -1,4 +1,4 @@
-package com.wojtanowski.konrad.clubapp.club.service;
+package com.wojtanowski.konrad.clubapp.club.service.impl;
 
 import com.wojtanowski.konrad.clubapp.club.mapper.ClubMapper;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
@@ -7,6 +7,7 @@ import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import com.wojtanowski.konrad.clubapp.club.repository.ClubRepository;
+import com.wojtanowski.konrad.clubapp.club.service.api.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,6 @@ public class ClubServiceJPA implements ClubService {
 
     @Override
     public GetClubsResponse getAllClubs() {
-
         return GetClubsResponse.builder()
                 .clubs(clubRepository.findAll().stream()
                         .map(clubMapper::clubToGetClubResponse)

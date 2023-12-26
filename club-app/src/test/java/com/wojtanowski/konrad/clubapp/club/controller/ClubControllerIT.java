@@ -8,7 +8,7 @@ import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.entity.Club;
 import com.wojtanowski.konrad.clubapp.club.repository.ClubRepository;
-import com.wojtanowski.konrad.clubapp.club.service.ClubService;
+import com.wojtanowski.konrad.clubapp.club.service.api.ClubService;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
