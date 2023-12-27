@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import wojtanowski.konrad.playerapp.player.mapper.PlayerMapper;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
+import wojtanowski.konrad.playerapp.player.model.dto.PostPlayerRequest;
 import wojtanowski.konrad.playerapp.player.model.entity.Player;
 import wojtanowski.konrad.playerapp.player.repository.PlayerRepository;
 import wojtanowski.konrad.playerapp.player.service.api.PlayerService;
@@ -37,5 +38,10 @@ public class PlayerServiceJPA implements PlayerService {
         Optional<Player> found = playerRepository.findById(playerId);
 
         return found.map(playerMapper::playerToGetPlayerResponse);
+    }
+
+    @Override
+    public GetPlayerResponse saveNewPlayer(PostPlayerRequest player) {
+        return playerMapper.playerToGetPlayerResponse(playerRepository.save(playerMapper.postPlayerRequestToPlayer(player)));
     }
 }

@@ -1,14 +1,15 @@
 package wojtanowski.konrad.playerapp.player.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
+import wojtanowski.konrad.playerapp.player.model.dto.PostPlayerRequest;
 import wojtanowski.konrad.playerapp.player.service.api.PlayerService;
 
 import java.util.Optional;
@@ -38,5 +39,15 @@ public class PlayerController {
         GetPlayerResponse playerResponse = foundPlayerOptional.get();
 
         return new ResponseEntity<>(playerResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(PLAYER_PATH)
+    public ResponseEntity<GetPlayerResponse> postPlayer(@Validated @RequestBody PostPlayerRequest player) {
+        GetPlayerResponse savedPlayer = playerService.saveNewPlayer(player);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", PLAYER_PATH + "/" + savedPlayer.getId().toString());
+
+        return new ResponseEntity<>(savedPlayer, headers, HttpStatus.CREATED);
     }
 }

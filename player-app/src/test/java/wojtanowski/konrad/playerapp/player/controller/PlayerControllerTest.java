@@ -45,11 +45,11 @@ class PlayerControllerTest {
         given(playerService.getAllPlayers())
                 .willReturn(GetPlayersResponse.builder().players(Arrays.asList(getGetPlayerResponse1(), getGetPlayerResponse2())).build());
 
-            mockMvc.perform(get(PlayerController.PLAYER_PATH))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.players").isArray())
-                    .andExpect(jsonPath("$.players.length()",is(2)));
+        mockMvc.perform(get(PlayerController.PLAYER_PATH))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.players").isArray())
+                .andExpect(jsonPath("$.players.length()", is(2)));
     }
 
     @Test
@@ -59,7 +59,7 @@ class PlayerControllerTest {
         given(playerService.getPlayerById(any())).willReturn(Optional.of(playerResponse));
 
         mockMvc.perform(get(PlayerController.PLAYER_PATH_ID, player.getId())
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(player.getId().toString())))
@@ -73,8 +73,84 @@ class PlayerControllerTest {
         given(playerService.getPlayerById(any())).willReturn(Optional.empty());
 
         mockMvc.perform(get(PlayerController.PLAYER_PATH_ID, UUID.randomUUID())
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testPostPlayer() throws Exception {
+        Player player = getPlayer1();
+        GetPlayerResponse playerResponse = getGetPlayerResponse1();
+        given(playerService.saveNewPlayer(any())).willReturn(playerResponse);
+
+        mockMvc.perform(post(PlayerController.PLAYER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(player)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"));
+    }
+
+    @Test
+    void testPostPlayerNullName() throws Exception {
+        Player player = Player.builder()
+                .surname("s")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+        given(playerService.saveNewPlayer(any())).willReturn(getGetPlayerResponse1());
+
+        mockMvc.perform(post(PlayerController.PLAYER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(player)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPostPlayerNullSurname() throws Exception {
+        Player player = Player.builder()
+                .name("n")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+        given(playerService.saveNewPlayer(any())).willReturn(getGetPlayerResponse1());
+
+        mockMvc.perform(post(PlayerController.PLAYER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(player)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPostPlayerTooLongName() throws Exception {
+        Player player = Player.builder()
+                .name("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+                .surname("s")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+        given(playerService.saveNewPlayer(any())).willReturn(getGetPlayerResponse1());
+
+        mockMvc.perform(post(PlayerController.PLAYER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(player)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testPostPlayerTooLongSurname() throws Exception {
+        Player player = Player.builder()
+                .name("n")
+                .surname("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+        given(playerService.saveNewPlayer(any())).willReturn(getGetPlayerResponse1());
+
+        mockMvc.perform(post(PlayerController.PLAYER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(player)))
+                .andExpect(status().isBadRequest());
     }
 
     private Player getPlayer1() {
