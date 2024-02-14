@@ -1,7 +1,7 @@
 package wojtanowski.konrad.playerapp.player.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.server.ResponseStatusException;
 import wojtanowski.konrad.playerapp.player.mapper.PlayerMapper;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.PostPlayerRequest;
+import wojtanowski.konrad.playerapp.player.model.dto.PutPlayerRequest;
 import wojtanowski.konrad.playerapp.player.model.entity.Player;
 import wojtanowski.konrad.playerapp.player.repository.PlayerRepository;
 import wojtanowski.konrad.playerapp.player.service.api.PlayerService;
 
-import java.security.cert.CertPathValidatorException;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -113,7 +114,7 @@ class PlayerControllerIT {
                 .surname("s")
                 .birthDate(LocalDate.of(2000, 10, 10))
                 .build();
-        assertThrows(CertPathValidatorException.class, () -> playerController.postPlayer(postPlayerRequest));
+        assertThrows(ConstraintViolationException.class, () -> playerController.postPlayer(postPlayerRequest));
     }
 
     @Test
@@ -122,7 +123,7 @@ class PlayerControllerIT {
                 .name("n")
                 .birthDate(LocalDate.of(2000, 10, 10))
                 .build();
-        assertThrows(CertPathValidatorException.class, () -> playerController.postPlayer(postPlayerRequest));
+        assertThrows(ConstraintViolationException.class, () -> playerController.postPlayer(postPlayerRequest));
     }
 
     @Test
@@ -132,7 +133,7 @@ class PlayerControllerIT {
                 .surname("s")
                 .birthDate(LocalDate.of(2000, 10, 10))
                 .build();
-        assertThrows(CertPathValidatorException.class, () -> playerController.postPlayer(postPlayerRequest));
+        assertThrows(ConstraintViolationException.class, () -> playerController.postPlayer(postPlayerRequest));
     }
 
     @Test
@@ -142,6 +143,83 @@ class PlayerControllerIT {
                 .surname("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
                 .birthDate(LocalDate.of(2000, 10, 10))
                 .build();
-        assertThrows(CertPathValidatorException.class, () -> playerController.postPlayer(postPlayerRequest));
+        assertThrows(ConstraintViolationException.class, () -> playerController.postPlayer(postPlayerRequest));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testUpdatePlayerById() {
+        Player player = playerRepository.findAll().get(0);
+        PutPlayerRequest putPlayerRequest = PutPlayerRequest.builder()
+                .name("UPDATED")
+                .surname(player.getSurname())
+                .birthDate(player.getBirthDate())
+                .build();
+
+        ResponseEntity<GetPlayerResponse> responseEntity = playerController.putPlayerById(player.getId(), putPlayerRequest);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Player updatedPlayer = playerRepository.findById(player.getId()).get();
+        assertThat(updatedPlayer.getName()).isEqualTo("UPDATED");
+        assertThat(updatedPlayer.getSurname()).isEqualTo(player.getSurname());
+        assertThat(updatedPlayer.getBirthDate()).isEqualTo(player.getBirthDate());
+    }
+
+    @Test
+    void testUpdatePlayerByIdNullName() {
+        Player player = playerRepository.findAll().get(0);
+        PutPlayerRequest putPlayerRequest = PutPlayerRequest.builder()
+                .surname("s")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+
+        assertThrows(ConstraintViolationException.class, () -> playerController.putPlayerById(player.getId(), putPlayerRequest));
+    }
+
+    @Test
+    void testUpdatePlayerByIdNullSurname() {
+        Player player = playerRepository.findAll().get(0);
+        PutPlayerRequest putPlayerRequest = PutPlayerRequest.builder()
+                .name("n")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+
+        assertThrows(ConstraintViolationException.class, () -> playerController.putPlayerById(player.getId(), putPlayerRequest));
+    }
+
+    @Test
+    void testUpdatePlayerByIdTooLongName() {
+        Player player = playerRepository.findAll().get(0);
+        PutPlayerRequest putPlayerRequest = PutPlayerRequest.builder()
+                .name("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+                .surname("s")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+
+        assertThrows(ConstraintViolationException.class, () -> playerController.putPlayerById(player.getId(), putPlayerRequest));
+    }
+
+    @Test
+    void testUpdatePlayerByIdTooLongSurname() {
+        Player player = playerRepository.findAll().get(0);
+        PutPlayerRequest putPlayerRequest = PutPlayerRequest.builder()
+                .name("n")
+                .surname("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+
+        assertThrows(ConstraintViolationException.class, () -> playerController.putPlayerById(player.getId(), putPlayerRequest));
+    }
+
+    @Test
+    void testUpdatePlayerByIdNotFound() {
+        PutPlayerRequest putPlayerRequest = PutPlayerRequest.builder()
+                .name("n")
+                .surname("s")
+                .birthDate(LocalDate.of(2000, 10, 10))
+                .build();
+
+        assertThrows(ResponseStatusException.class, () -> playerController.putPlayerById(UUID.randomUUID(), putPlayerRequest));
     }
 }

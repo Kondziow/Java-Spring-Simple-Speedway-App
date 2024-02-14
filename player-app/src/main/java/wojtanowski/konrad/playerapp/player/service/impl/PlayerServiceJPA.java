@@ -8,12 +8,14 @@ import wojtanowski.konrad.playerapp.player.mapper.PlayerMapper;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.PostPlayerRequest;
+import wojtanowski.konrad.playerapp.player.model.dto.PutPlayerRequest;
 import wojtanowski.konrad.playerapp.player.model.entity.Player;
 import wojtanowski.konrad.playerapp.player.repository.PlayerRepository;
 import wojtanowski.konrad.playerapp.player.service.api.PlayerService;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Primary
@@ -43,5 +45,20 @@ public class PlayerServiceJPA implements PlayerService {
     @Override
     public GetPlayerResponse saveNewPlayer(PostPlayerRequest player) {
         return playerMapper.playerToGetPlayerResponse(playerRepository.save(playerMapper.postPlayerRequestToPlayer(player)));
+    }
+
+    @Override
+    public Optional<GetPlayerResponse> updatePlayerById(UUID playerId, PutPlayerRequest player) {
+        AtomicReference<Optional<GetPlayerResponse>> atomicReference = new AtomicReference<>();
+
+        playerRepository.findById(playerId).ifPresentOrElse(found -> {
+            Player playerWithId = playerMapper.putPlayerRequestToPlayer(player);
+            playerWithId.setId(playerId);
+            atomicReference.set(Optional.of(playerMapper
+                    .playerToGetPlayerResponse(playerRepository
+                            .save(playerWithId))));
+        }, () -> atomicReference.set(Optional.empty()));
+
+        return atomicReference.get();
     }
 }

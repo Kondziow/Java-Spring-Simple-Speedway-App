@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.PostPlayerRequest;
+import wojtanowski.konrad.playerapp.player.model.dto.PutPlayerRequest;
 import wojtanowski.konrad.playerapp.player.service.api.PlayerService;
 
 import java.util.Optional;
@@ -49,5 +50,20 @@ public class PlayerController {
         headers.add("Location", PLAYER_PATH + "/" + savedPlayer.getId().toString());
 
         return new ResponseEntity<>(savedPlayer, headers, HttpStatus.CREATED);
+    }
+
+    @PutMapping(PLAYER_PATH_ID)
+    public ResponseEntity<GetPlayerResponse> putPlayerById(
+            @PathVariable("playerId") UUID playerId,
+            @Validated @RequestBody PutPlayerRequest player
+    ){
+        Optional<GetPlayerResponse> getPlayerResponse = playerService.updatePlayerById(playerId, player);
+        if (getPlayerResponse.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        GetPlayerResponse response = getPlayerResponse.get();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
