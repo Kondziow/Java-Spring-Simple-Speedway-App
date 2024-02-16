@@ -61,4 +61,13 @@ public class PlayerServiceJPA implements PlayerService {
 
         return atomicReference.get();
     }
+
+    @Override
+    public Boolean deletePlayerById(UUID playerId) {
+        if (playerRepository.existsById(playerId)) {
+            playerRepository.deleteById(playerId);
+            return true;
+        }
+        return false;
+    }
 }

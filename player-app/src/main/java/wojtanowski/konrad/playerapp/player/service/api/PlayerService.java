@@ -17,4 +17,6 @@ public interface PlayerService {
     GetPlayerResponse saveNewPlayer(@Valid PostPlayerRequest player);
 
     Optional<GetPlayerResponse> updatePlayerById(UUID playerId, @Valid PutPlayerRequest player);
+
+    Boolean deletePlayerById(UUID playerId);
 }

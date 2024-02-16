@@ -222,4 +222,21 @@ class PlayerControllerIT {
 
         assertThrows(ResponseStatusException.class, () -> playerController.putPlayerById(UUID.randomUUID(), putPlayerRequest));
     }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testDeletePlayerById() {
+        Player player = playerRepository.findAll().get(0);
+
+        ResponseEntity<Void> response = playerController.deletePlayerById(player.getId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        assertThat(playerRepository.findById(player.getId())).isEmpty();
+    }
+
+    @Test
+    void testDeletePlayerByIdNotFound() {
+        assertThrows(ResponseStatusException.class, () ->playerController.deletePlayerById(UUID.randomUUID()));
+    }
 }

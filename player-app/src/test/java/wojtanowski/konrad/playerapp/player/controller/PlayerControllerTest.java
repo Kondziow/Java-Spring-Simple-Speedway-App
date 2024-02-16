@@ -20,9 +20,11 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -242,6 +244,28 @@ class PlayerControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(putPlayerRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testDeletePlayerById() throws Exception {
+        given(playerService.deletePlayerById(any())).willReturn(true);
+
+        mockMvc.perform(delete(PlayerController.PLAYER_PATH_ID, getPlayer1().getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(playerService).deletePlayerById(uuidArgumentCaptor.capture());
+
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(getPlayer1().getId());
+    }
+
+    @Test
+    void testDeletePlayerByIdNotFound() throws Exception {
+        given(playerService.deletePlayerById(any())).willReturn(false);
+
+        mockMvc.perform(delete(PlayerController.PLAYER_PATH_ID, UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
