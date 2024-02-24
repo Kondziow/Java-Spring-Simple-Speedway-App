@@ -12,7 +12,8 @@ public class Config {
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder,
                                      @Value("${gateway.app.host}") String host,
-                                     @Value("${club.app.url}") String clubUrl
+                                     @Value("${club.app.url}") String clubUrl,
+                                     @Value("${player.app.url}") String playerUrl
     ) {
         return builder.routes()
                 .route("club-app", r -> r
@@ -24,6 +25,18 @@ public class Config {
                         .or()
                         .path("/api/v1/clubs/{clubId}")
                         .uri(clubUrl)
+                )
+                .route("player-app", r -> r
+                        .host(host)
+                        .and()
+                        .path("/api/v1/players")
+                        .or()
+                        .path("/api/v1/players/**")
+                        .or()
+                        .path("/api/v1/players/{playerId}")
+                        .or()
+                        .path("/api/v1/players/{playerId}/clubs")
+                        .uri(playerUrl)
                 )
                 .build();
     }
