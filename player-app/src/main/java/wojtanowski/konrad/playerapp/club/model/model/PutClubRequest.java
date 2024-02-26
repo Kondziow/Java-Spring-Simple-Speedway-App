@@ -1,9 +1,9 @@
 package wojtanowski.konrad.playerapp.club.model.model;
 
 import lombok.*;
+import wojtanowski.konrad.playerapp.player.model.entity.Player;
 
 import java.util.List;
-import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
@@ -11,5 +11,5 @@ import java.util.UUID;
 @Getter
 @Setter
 public class PutClubRequest {
-    private List<UUID> players;
+    private List<Player> players;
 }
