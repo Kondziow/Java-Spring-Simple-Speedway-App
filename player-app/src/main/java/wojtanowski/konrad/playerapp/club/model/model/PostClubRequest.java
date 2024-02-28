@@ -10,6 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PutClubRequest {
+public class PostClubRequest {
     private List<Player> players;
 }
