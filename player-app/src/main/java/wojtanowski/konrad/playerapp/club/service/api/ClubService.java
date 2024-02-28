@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface ClubService {
     GetClubResponse saveNewClub(PostClubRequest club);
 
-    void deleteClubById(UUID clubId);
+    Boolean deleteClubById(UUID clubId);
 }

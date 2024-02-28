@@ -1,6 +1,7 @@
 package wojtanowski.konrad.playerapp.club.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import wojtanowski.konrad.playerapp.club.mapper.ClubMapper;
 import wojtanowski.konrad.playerapp.club.model.entity.Club;
@@ -11,9 +12,10 @@ import wojtanowski.konrad.playerapp.club.service.api.ClubService;
 
 import java.util.UUID;
 
+@Primary
 @Service
 @RequiredArgsConstructor
-public class ClubServiceImpl implements ClubService {
+public class ClubServiceJPA implements ClubService {
     private final ClubRepository clubRepository;
     private final ClubMapper clubMapper;
 
@@ -24,7 +26,11 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public void deleteClubById(UUID clubId) {
-        clubRepository.deleteById(clubId);
+    public Boolean deleteClubById(UUID clubId) {
+        if (clubRepository.existsById(clubId)) {
+            clubRepository.deleteById(clubId);
+            return true;
+        }
+        return false;
     }
 }
