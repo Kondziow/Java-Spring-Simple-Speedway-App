@@ -7,6 +7,8 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import wojtanowski.konrad.playerapp.club.model.entity.Club;
+import wojtanowski.konrad.playerapp.club.repository.ClubRepository;
 import wojtanowski.konrad.playerapp.initializer.DataInitializer;
 import wojtanowski.konrad.playerapp.player.model.entity.Player;
 
@@ -22,6 +24,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerRepositoryTest {
     @Autowired
     PlayerRepository playerRepository;
+
+    @Autowired
+    ClubRepository clubRepository;
+
+    @Test
+    void testGetPlayersByClubId() {
+        Club club = clubRepository.findAll().get(0);
+
+        List<Player> players = playerRepository.findByClub_Id(club.getId());
+
+        assertThat(players).isNotNull();
+        assertThat(players.size()).isEqualTo(0);
+    }
 
     @Test
     void testGetAllPlayers() {
