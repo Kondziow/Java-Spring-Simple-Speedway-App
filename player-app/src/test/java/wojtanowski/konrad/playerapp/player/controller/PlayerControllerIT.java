@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.server.ResponseStatusException;
+import wojtanowski.konrad.playerapp.club.model.entity.Club;
+import wojtanowski.konrad.playerapp.club.repository.ClubRepository;
 import wojtanowski.konrad.playerapp.player.mapper.PlayerMapper;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
@@ -44,6 +46,9 @@ class PlayerControllerIT {
     PlayerMapper playerMapper;
 
     @Autowired
+    ClubRepository clubRepository;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     @Autowired
@@ -54,6 +59,18 @@ class PlayerControllerIT {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
+
+    @Test
+    void testGetPlayersByClubId() {
+        Club club = clubRepository.findAll().get(0);
+
+        GetPlayersResponse players = playerController.getPlayersByClubId(club.getId()).getBody();
+
+        assertThat(players).isNotNull();
+        assertThat(players.getPlayers()).isNotNull();
+        assertThat(players.getPlayers().size()).isEqualTo(0);
+
     }
 
     @Test

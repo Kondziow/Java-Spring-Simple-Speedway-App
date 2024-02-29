@@ -44,6 +44,18 @@ class PlayerControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
     @Test
+    void testGetPlayersByClubId() throws Exception {
+        //Returns GetPlayersResponse with 2 array elements
+        given(playerService.getPlayersByClubId(any())).willReturn(GetPlayersResponse.builder().players(Arrays.asList(getGetPlayerResponse1(), getGetPlayerResponse2())).build());
+
+        mockMvc.perform(get(PlayerController.CLUB_PATH_ID_PLAYERS, UUID.randomUUID()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.players").isArray())
+                .andExpect(jsonPath("$.players.length()", is(2)));
+    }
+
+    @Test
     void testGetAllPlayers() throws Exception {
         given(playerService.getAllPlayers())
                 .willReturn(GetPlayersResponse.builder().players(Arrays.asList(getGetPlayerResponse1(), getGetPlayerResponse2())).build());
