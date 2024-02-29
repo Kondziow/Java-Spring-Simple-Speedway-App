@@ -19,6 +19,11 @@ public class DataInitializer implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
+        Club torun = Club.builder()
+                .id(UUID.fromString("52201804-7794-4589-96e1-dfb9353039c8"))
+                .build();
+        clubRepository.save(torun);
+
         Club lublin = Club.builder()
                 .id(UUID.fromString("77588f1a-c0fd-4b9c-b5d5-04b5777e9e98"))
                 .build();
@@ -28,11 +33,6 @@ public class DataInitializer implements InitializingBean {
                 .id(UUID.fromString("12484856-2f73-4cda-a064-0651b749a6cb"))
                 .build();
         clubRepository.save(wroclaw);
-
-        Club torun = Club.builder()
-                .id(UUID.fromString("52201804-7794-4589-96e1-dfb9353039c8"))
-                .build();
-        clubRepository.save(torun);
 
         Club czestochowa = Club.builder()
                 .id(UUID.fromString("a45f15cb-f5e0-4639-acff-f5a9a02bc820"))
@@ -64,6 +64,7 @@ public class DataInitializer implements InitializingBean {
                 .name("Emil")
                 .surname("Sajfutdinow")
                 .birthDate(LocalDate.of(1989,10, 26))
+                .club(torun)
                 .build();
         playerRepository.save(emilSajfutdinow);
 
@@ -71,6 +72,7 @@ public class DataInitializer implements InitializingBean {
                 .name("Robert")
                 .surname("Lambert")
                 .birthDate(LocalDate.of(1998, 4, 5))
+                .club(torun)
                 .build();
         playerRepository.save(robertLambert);
 
@@ -78,6 +80,7 @@ public class DataInitializer implements InitializingBean {
                 .name("Tai")
                 .surname("Woffinden")
                 .birthDate(LocalDate.of(1990, 8, 10))
+                .club(wroclaw)
                 .build();
         playerRepository.save(taiWoffinden);
 
@@ -85,6 +88,7 @@ public class DataInitializer implements InitializingBean {
                 .name("<aciej")
                 .surname("Janowski")
                 .birthDate(LocalDate.of(1991, 8, 6))
+                .club(wroclaw)
                 .build();
         playerRepository.save(maciejJanowski);
     }

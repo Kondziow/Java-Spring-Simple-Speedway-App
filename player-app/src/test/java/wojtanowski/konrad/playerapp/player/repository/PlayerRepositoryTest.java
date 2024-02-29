@@ -35,7 +35,7 @@ class PlayerRepositoryTest {
         List<Player> players = playerRepository.findByClub_Id(club.getId());
 
         assertThat(players).isNotNull();
-        assertThat(players.size()).isEqualTo(0);
+        assertThat(players.size()).isEqualTo(2);
     }
 
     @Test

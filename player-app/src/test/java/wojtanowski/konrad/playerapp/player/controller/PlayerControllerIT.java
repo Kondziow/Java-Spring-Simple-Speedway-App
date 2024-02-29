@@ -69,7 +69,7 @@ class PlayerControllerIT {
 
         assertThat(players).isNotNull();
         assertThat(players.getPlayers()).isNotNull();
-        assertThat(players.getPlayers().size()).isEqualTo(0);
+        assertThat(players.getPlayers().size()).isEqualTo(2);
 
     }
 
