@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import wojtanowski.konrad.playerapp.club.controller.ClubController;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.PostPlayerRequest;
@@ -21,8 +22,14 @@ import java.util.UUID;
 public class PlayerController {
     public static final String PLAYER_PATH = "/api/v1/players";
     public static final String PLAYER_PATH_ID = PLAYER_PATH + "/{playerId}";
+    public static final String CLUB_PATH_ID_PLAYERS = ClubController.CLUB_PATH_ID + "/players";
 
     private final PlayerService playerService;
+
+    @GetMapping(CLUB_PATH_ID_PLAYERS)
+    public ResponseEntity<GetPlayersResponse> getPlayersByClubId(@PathVariable("clubId") UUID clubId) {
+        return ResponseEntity.ok(playerService.getPlayersByClubId(clubId));
+    }
 
     @GetMapping(PLAYER_PATH)
     public ResponseEntity<GetPlayersResponse> getAllPlayers() {

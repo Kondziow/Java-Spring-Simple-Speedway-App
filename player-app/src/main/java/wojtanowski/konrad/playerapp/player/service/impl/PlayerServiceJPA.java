@@ -27,6 +27,15 @@ public class PlayerServiceJPA implements PlayerService {
     private final PlayerMapper playerMapper;
 
     @Override
+    public GetPlayersResponse getPlayersByClubId(UUID clubId) {
+        return GetPlayersResponse.builder()
+                .players(playerRepository.findByClub_Id(clubId).stream()
+                        .map(playerMapper::playerToGetPlayerResponse)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    @Override
     public GetPlayersResponse getAllPlayers() {
         return GetPlayersResponse.builder()
                 .players(playerRepository.findAll().stream()

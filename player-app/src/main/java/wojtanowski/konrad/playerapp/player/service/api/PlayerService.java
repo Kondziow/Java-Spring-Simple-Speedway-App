@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PlayerService {
+    GetPlayersResponse getPlayersByClubId(UUID clubId);
+
     GetPlayersResponse getAllPlayers();
 
     Optional<GetPlayerResponse> getPlayerById(UUID playerId);
