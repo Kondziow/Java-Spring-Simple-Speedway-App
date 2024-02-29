@@ -26,7 +26,7 @@ public class ClubController {
     @PostMapping(CLUB_PATH)
     public ResponseEntity<Void> postClub(PostClubRequest club){
         GetClubResponse getClubResponse = clubService.saveNewClub(club);
-        return ResponseEntity.created(URI.create(CLUB_PATH + getClubResponse.getId())).build();
+        return ResponseEntity.created(URI.create(CLUB_PATH + "/" + getClubResponse.getId())).build();
     }
 
     @DeleteMapping(CLUB_PATH_ID)

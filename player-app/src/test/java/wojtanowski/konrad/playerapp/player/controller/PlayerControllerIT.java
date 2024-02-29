@@ -237,6 +237,6 @@ class PlayerControllerIT {
 
     @Test
     void testDeletePlayerByIdNotFound() {
-        assertThrows(ResponseStatusException.class, () ->playerController.deletePlayerById(UUID.randomUUID()));
+        assertThrows(ResponseStatusException.class, () -> playerController.deletePlayerById(UUID.randomUUID()));
     }
 }
