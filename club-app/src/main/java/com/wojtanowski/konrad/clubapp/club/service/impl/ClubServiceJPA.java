@@ -1,5 +1,6 @@
 package com.wojtanowski.konrad.clubapp.club.service.impl;
 
+import com.wojtanowski.konrad.clubapp.club.event.api.ClubEventRepository;
 import com.wojtanowski.konrad.clubapp.club.mapper.ClubMapper;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class ClubServiceJPA implements ClubService {
     private final ClubRepository clubRepository;
     private final ClubMapper clubMapper;
+    private final ClubEventRepository clubEventRepository;
 
     @Override
     public GetClubsResponse getAllClubs() {
@@ -44,7 +46,11 @@ public class ClubServiceJPA implements ClubService {
 
     @Override
     public GetClubResponse saveNewClub(PostClubRequest club) {
-        return clubMapper.clubToGetClubResponse(clubRepository.save(clubMapper.postClubRequestToClub(club)));
+        GetClubResponse saved = clubMapper.clubToGetClubResponse(clubRepository.save(clubMapper.postClubRequestToClub(club)));
+
+        clubEventRepository.create(saved.getId());
+
+        return saved;
     }
 
     @Override
@@ -66,6 +72,7 @@ public class ClubServiceJPA implements ClubService {
     public Boolean deleteClubById(UUID clubId) {
         if (clubRepository.existsById(clubId)) {
             clubRepository.deleteById(clubId);
+            clubEventRepository.delete(clubId);
             return true;
         }
         return false;

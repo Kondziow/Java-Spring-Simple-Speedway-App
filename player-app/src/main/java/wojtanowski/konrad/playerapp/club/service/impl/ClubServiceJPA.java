@@ -6,11 +6,13 @@ import org.springframework.stereotype.Service;
 import wojtanowski.konrad.playerapp.club.mapper.ClubMapper;
 import wojtanowski.konrad.playerapp.club.model.entity.Club;
 import wojtanowski.konrad.playerapp.club.model.model.GetClubResponse;
+import wojtanowski.konrad.playerapp.club.model.model.GetClubsResponse;
 import wojtanowski.konrad.playerapp.club.model.model.PostClubRequest;
 import wojtanowski.konrad.playerapp.club.repository.ClubRepository;
 import wojtanowski.konrad.playerapp.club.service.api.ClubService;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Primary
 @Service
@@ -32,5 +34,14 @@ public class ClubServiceJPA implements ClubService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public GetClubsResponse getAllClubs() {
+        return GetClubsResponse.builder()
+                .clubs(clubRepository.findAll().stream()
+                        .map(clubMapper::clubToGetClubResponse)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

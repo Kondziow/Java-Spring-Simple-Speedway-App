@@ -3,12 +3,10 @@ package wojtanowski.konrad.playerapp.club.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import wojtanowski.konrad.playerapp.club.model.model.GetClubResponse;
+import wojtanowski.konrad.playerapp.club.model.model.GetClubsResponse;
 import wojtanowski.konrad.playerapp.club.model.model.PostClubRequest;
 import wojtanowski.konrad.playerapp.club.service.api.ClubService;
 
@@ -23,8 +21,9 @@ public class ClubController {
 
     private final ClubService clubService;
 
-    @PostMapping(CLUB_PATH)
-    public ResponseEntity<Void> postClub(PostClubRequest club){
+    @PostMapping(CLUB_PATH_ID)
+    public ResponseEntity<Void> postClub(@PathVariable("clubId") UUID clubId, PostClubRequest club) {
+        club.setId(clubId);
         GetClubResponse getClubResponse = clubService.saveNewClub(club);
         return ResponseEntity.created(URI.create(CLUB_PATH + "/" + getClubResponse.getId())).build();
     }
@@ -35,5 +34,10 @@ public class ClubController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/api/v1/players/clubs")
+    public ResponseEntity<GetClubsResponse> getAllClubs() {
+        return ResponseEntity.ok(clubService.getAllClubs());
     }
 }

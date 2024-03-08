@@ -16,16 +16,6 @@ public class Config {
                                      @Value("${player.app.url}") String playerUrl
     ) {
         return builder.routes()
-                .route("club-app", r -> r
-                        .host(host)
-                        .and()
-                        .path("/api/v1/clubs")
-                        .or()
-                        .path("/api/v1/clubs/**")
-                        .or()
-                        .path("/api/v1/clubs/{clubId}")
-                        .uri(clubUrl)
-                )
                 .route("player-app", r -> r
                         .host(host)
                         .and()
@@ -36,7 +26,19 @@ public class Config {
                         .path("/api/v1/players/{playerId}")
                         .or()
                         .path("/api/v1/players/{playerId}/clubs")
+                        .or()
+                        .path("/api/v1/clubs/{clubId}/players")
                         .uri(playerUrl)
+                )
+                .route("club-app", r -> r
+                        .host(host)
+                        .and()
+                        .path("/api/v1/clubs")
+                        .or()
+                        .path("/api/v1/clubs/**")
+                        .or()
+                        .path("/api/v1/clubs/{clubId}")
+                        .uri(clubUrl)
                 )
                 .build();
     }

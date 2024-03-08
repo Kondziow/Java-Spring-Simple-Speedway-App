@@ -4,6 +4,7 @@ import lombok.*;
 import wojtanowski.konrad.playerapp.player.model.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
@@ -11,5 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class PostClubRequest {
+    private UUID id;
     private List<Player> players;
 }

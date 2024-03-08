@@ -6,18 +6,17 @@ import lombok.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Club {
     @Id
     @NotNull
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "club_id", updatable = false, nullable = false)
     private UUID id;
 
@@ -30,4 +29,10 @@ public class Club {
     @NotBlank
     @Size(max = 25)
     private String city;
+
+    public Club(final UUID id, final String name, final String city) {
+        this.id = Objects.requireNonNullElseGet(id, UUID::randomUUID);
+        this.name = name;
+        this.city = city;
+    }
 }

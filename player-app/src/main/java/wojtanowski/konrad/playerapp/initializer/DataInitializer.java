@@ -61,6 +61,7 @@ public class DataInitializer implements InitializingBean {
 
 
         Player emilSajfutdinow = Player.builder()
+                .id(UUID.fromString("ce54f979-ff17-4ee0-8974-615d86cb93c7"))
                 .name("Emil")
                 .surname("Sajfutdinow")
                 .birthDate(LocalDate.of(1989,10, 26))
@@ -69,6 +70,7 @@ public class DataInitializer implements InitializingBean {
         playerRepository.save(emilSajfutdinow);
 
         Player robertLambert = Player.builder()
+                .id(UUID.fromString("6ccae9b8-d00e-4338-9b6d-ac4cd3e8ccc9"))
                 .name("Robert")
                 .surname("Lambert")
                 .birthDate(LocalDate.of(1998, 4, 5))
@@ -77,6 +79,7 @@ public class DataInitializer implements InitializingBean {
         playerRepository.save(robertLambert);
 
         Player taiWoffinden = Player.builder()
+                .id(UUID.fromString("d846b329-5ba4-4b5b-8129-7f8d4ef462ec"))
                 .name("Tai")
                 .surname("Woffinden")
                 .birthDate(LocalDate.of(1990, 8, 10))
@@ -85,7 +88,8 @@ public class DataInitializer implements InitializingBean {
         playerRepository.save(taiWoffinden);
 
         Player maciejJanowski = Player.builder()
-                .name("<aciej")
+                .id(UUID.fromString("e99f8b8b-23bb-4071-b414-de407764c52e"))
+                .name("Maciej")
                 .surname("Janowski")
                 .birthDate(LocalDate.of(1991, 8, 6))
                 .club(wroclaw)

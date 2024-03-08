@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import wojtanowski.konrad.playerapp.club.model.model.GetClubResponse;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -27,4 +28,6 @@ public class GetPlayerResponse {
     private String surname;
 
     private LocalDate birthDate;
+
+    private GetClubResponse club;
 }

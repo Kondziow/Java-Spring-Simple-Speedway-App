@@ -35,7 +35,7 @@ class ClubControllerIT {
     void testPostClub() {
         PostClubRequest club = PostClubRequest.builder().build();
 
-        ResponseEntity<Void> response = clubController.postClub(club);
+        ResponseEntity<Void> response = clubController.postClub(UUID.randomUUID(), club);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getHeaders()).isNotNull();

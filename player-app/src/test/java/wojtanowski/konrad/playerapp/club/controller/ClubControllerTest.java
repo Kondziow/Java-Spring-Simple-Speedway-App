@@ -43,7 +43,7 @@ class ClubControllerTest {
         GetClubResponse clubResponse = GetClubResponse.builder().build();
         given(clubService.saveNewClub(any())).willReturn(clubResponse);
 
-        mockMvc.perform(post(ClubController.CLUB_PATH)
+        mockMvc.perform(post(ClubController.CLUB_PATH_ID, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(club)))
