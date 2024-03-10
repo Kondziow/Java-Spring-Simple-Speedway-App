@@ -5,11 +5,13 @@ import {BrowserModule} from "@angular/platform-browser";
 import {AppRoutes} from "./app.routes";
 import {ClubService} from "./club/service/club.service";
 import {HttpClientModule} from "@angular/common/http";
+import {ClubDetailsComponent} from "./club/view/club-details/club-details.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ClubListComponent
+    ClubListComponent,
+    ClubDetailsComponent
   ],
   imports: [
     BrowserModule,

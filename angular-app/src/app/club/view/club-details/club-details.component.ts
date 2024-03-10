@@ -1,12 +1,30 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ClubModel} from "../../model/club.model";
+import {ActivatedRoute} from "@angular/router";
+import {ClubService} from "../../service/club.service";
 
 @Component({
   selector: 'app-club-details',
-  standalone: true,
-  imports: [],
   templateUrl: './club-details.component.html',
   styleUrl: './club-details.component.css'
 })
-export class ClubDetailsComponent {
+export class ClubDetailsComponent implements OnInit {
+  clubId: string | undefined;
+  club: ClubModel | undefined;
 
+  constructor(
+    private route: ActivatedRoute,
+    private clubService: ClubService
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.clubId = this.route.snapshot.params['id'];
+
+    if (this.clubId) {
+      this.clubService.getClubById(this.clubId).subscribe((club: ClubModel) => {
+        this.club = club;
+      })
+    }
+  }
 }

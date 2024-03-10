@@ -1,1 +1,21 @@
-<p>club-details works!</p>
+<div *ngIf="club">
+  <h1>Club Details</h1>
+
+  <div>
+      <span>ID: {{ club.id }}</span>
+      <span></span>
+  </div>
+
+  <div>
+      <span>NAME: {{ club.name }}</span>
+  </div>
+
+  <div>
+      <span>CITY: {{ club.city }}</span>
+  </div>
+
+  <div>
+    <button [routerLink]="['./edit']">Edit</button>
+  </div>
+
+</div>

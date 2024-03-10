@@ -8,6 +8,7 @@
     <tr>
       <th>Name</th>
       <th>City</th>
+      <th>Action</th>
     </tr>
     </thead>
 
@@ -15,6 +16,10 @@
     <tr *ngFor="let club of clubs">
       <td>{{ club.name }}</td>
       <td>{{ club.city }}</td>
+      <td>
+        <button [routerLink]="['.', club.id]">Details</button>
+        <button [routerLink]="['.', club.id, 'edit']">Edit</button>
+      </td>
     </tr>
     </tbody>
   </table>
