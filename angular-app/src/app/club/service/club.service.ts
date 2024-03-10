@@ -17,4 +17,7 @@ export class ClubService {
     return this.http.get<any[]>(this.apiClubUrl);
   }
 
+  getClubById(id: string): Observable<ClubModel> {
+    return this.http.get<ClubModel>(this.apiClubUrlId.replace('{clubId}', id));
+  }
 }
