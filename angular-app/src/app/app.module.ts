@@ -4,6 +4,7 @@ import {AppComponent} from "./app.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {AppRoutes} from "./app.routes";
 import {ClubService} from "./club/service/club.service";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import {ClubService} from "./club/service/club.service";
   ],
   imports: [
     BrowserModule,
-    AppRoutes
+    AppRoutes,
+    HttpClientModule
   ],
   providers: [
     ClubService

@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {ClubModel} from "../model/club.model";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ClubService {
   constructor(private http: HttpClient) {
   }
 
-  getAllClubs(): Observable<any[]> {
+  getAllClubs(): Observable<ClubModel[]> {
     return this.http.get<any[]>(this.apiClubUrl);
   }
 

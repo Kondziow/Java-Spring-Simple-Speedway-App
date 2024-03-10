@@ -2,5 +2,20 @@
   <header>
     <h1>Clubs</h1>
   </header>
-  <p>AaaAAAa</p>
+
+  <table *ngIf="clubs">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>City</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let club of clubs">
+      <td>{{ club.name }}</td>
+      <td>{{ club.city }}</td>
+    </tr>
+    </tbody>
+  </table>
 </article>
