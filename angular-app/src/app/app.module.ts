@@ -7,6 +7,7 @@ import {ClubService} from "./club/service/club.service";
 import {HttpClientModule} from "@angular/common/http";
 import {ClubDetailsComponent} from "./club/view/club-details/club-details.component";
 import {ClubEditComponent} from "./club/view/club-edit/club-edit.component";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import {ClubEditComponent} from "./club/view/club-edit/club-edit.component";
   imports: [
     BrowserModule,
     AppRoutes,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [
     ClubService

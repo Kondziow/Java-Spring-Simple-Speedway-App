@@ -9,8 +9,8 @@ import {ClubService} from "../../service/club.service";
   styleUrl: './club-details.component.css'
 })
 export class ClubDetailsComponent implements OnInit {
-  clubId: string | undefined;
-  club: ClubModel | undefined;
+  clubId!: string;
+  club!: ClubModel;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,10 +21,9 @@ export class ClubDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.clubId = this.route.snapshot.params['id'];
 
-    if (this.clubId) {
-      this.clubService.getClubById(this.clubId).subscribe((club: ClubModel) => {
-        this.club = club;
-      })
-    }
+    this.clubService.getClubById(this.clubId).subscribe((club: ClubModel) => {
+      this.club = club;
+    })
+
   }
 }
