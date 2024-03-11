@@ -21,6 +21,10 @@ export class ClubService {
     return this.http.get<ClubModel>(this.apiClubUrlId.replace('{clubId}', id));
   }
 
+  addNewClub(club: ClubModel): Observable<ClubModel> {
+    return this.http.post<ClubModel>(this.apiClubUrl, club)
+  }
+
   updateClubById(club: ClubModel): Observable<ClubModel> {
     return this.http.put<ClubModel>(this.apiClubUrlId.replace('{clubId}', club.id), club);
   }

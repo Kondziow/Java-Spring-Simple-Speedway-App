@@ -8,13 +8,15 @@ import {HttpClientModule} from "@angular/common/http";
 import {ClubDetailsComponent} from "./club/view/club-details/club-details.component";
 import {ClubEditComponent} from "./club/view/club-edit/club-edit.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {ClubAddComponent} from "./club/view/club-add/club-add.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     ClubListComponent,
     ClubDetailsComponent,
-    ClubEditComponent
+    ClubEditComponent,
+    ClubAddComponent
   ],
   imports: [
     BrowserModule,
