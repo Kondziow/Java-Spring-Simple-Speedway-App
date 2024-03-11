@@ -14,14 +14,18 @@ export class ClubService {
   }
 
   getAllClubs(): Observable<ClubModel[]> {
-    return this.http.get<any[]>(this.apiClubUrl);
+    return this.http.get<ClubModel[]>(this.apiClubUrl);
   }
 
   getClubById(id: string): Observable<ClubModel> {
     return this.http.get<ClubModel>(this.apiClubUrlId.replace('{clubId}', id));
   }
 
-  updateClubById(club: ClubModel): Observable<any> {
+  updateClubById(club: ClubModel): Observable<ClubModel> {
     return this.http.put<ClubModel>(this.apiClubUrlId.replace('{clubId}', club.id), club);
+  }
+
+  deleteClubById(id: string): Observable<any> {
+    return this.http.delete<any>(this.apiClubUrlId.replace('{clubId}', id))
   }
 }

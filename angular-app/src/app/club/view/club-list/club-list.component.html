@@ -19,6 +19,7 @@
       <td>
         <button [routerLink]="['.', club.id]">Details</button>
         <button [routerLink]="['.', club.id, 'edit']">Edit</button>
+        <button (click)="deleteClub(club.id)">Delete</button>
       </td>
     </tr>
     </tbody>
