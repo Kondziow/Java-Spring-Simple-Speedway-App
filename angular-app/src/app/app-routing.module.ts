@@ -1,6 +1,6 @@
 import {RouterModule, Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
-import {ClubListComponent} from "./club/club-list/club-list/club-list.component";
+import {ClubListComponent} from "./club/club-list/club-list.component";
 
 
 const routes: Routes = [
