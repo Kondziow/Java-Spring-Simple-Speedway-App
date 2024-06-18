@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h1>Clubs</h1>
+
+    <ul class="list-group">
+      <li *ngFor="let clubItem of clubs"
+        class="list-group-item">
+        <app-club-item [club]="clubItem"></app-club-item>
+      </li>
+    </ul>
+  </div>
+</div>
+
