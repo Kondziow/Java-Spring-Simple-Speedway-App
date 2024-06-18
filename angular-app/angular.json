@@ -55,9 +55,6 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "proxyConfig": "src/proxy.conf.json"
-          },
           "configurations": {
             "production": {
               "buildTarget": "angular-app:build:production"
@@ -94,8 +91,5 @@
         }
       }
     }
-  },
-  "cli": {
-    "analytics": "b9b2cb52-ea4d-4c28-a011-92bd744fe7ae"
   }
 }
