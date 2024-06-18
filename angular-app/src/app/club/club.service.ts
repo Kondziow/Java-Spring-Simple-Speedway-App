@@ -9,8 +9,7 @@ export class ClubService {
 
   getClubs() {
     const url = `${backendUrl}/clubs`;
-    //const url = `/api/v1/clubs/clubs`;
-    console.log("URL: " + url)
+
     return this.http.get(url)
   }
 }
