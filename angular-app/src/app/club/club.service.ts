@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {backendUrl} from "../shared/http.config";
+import {ClubModel} from "./club.model";
 
 @Injectable({providedIn: 'root'})
 export class ClubService {
@@ -10,6 +11,6 @@ export class ClubService {
   getClubs() {
     const url = `${backendUrl}/clubs`;
 
-    return this.http.get(url)
+    return this.http.get<ClubModel[]>(url);
   }
 }
