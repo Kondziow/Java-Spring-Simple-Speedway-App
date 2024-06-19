@@ -13,4 +13,9 @@ export class ClubService {
 
     return this.http.get<ClubModel[]>(url);
   }
+
+  getClubById(id: string) {
+    const url = `${backendUrl}/clubs/${id}`;
+    return this.http.get<ClubModel>(url);
+  }
 }
