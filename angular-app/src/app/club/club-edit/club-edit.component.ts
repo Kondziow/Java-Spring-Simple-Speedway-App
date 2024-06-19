@@ -34,7 +34,7 @@ export class ClubEditComponent implements OnInit {
   }
 
   onSubmit() {
-    this.clubService.putClubById(this.club, this.clubId).subscribe(() => {
+    this.clubService.putClubById(this.clubForm.value, this.clubId).subscribe(() => {
       this.goBack();
     })
   }
