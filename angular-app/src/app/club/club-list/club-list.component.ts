@@ -3,6 +3,7 @@ import {ClubModel} from "../club.model";
 import {ClubService} from "../club.service";
 import {NgForOf} from "@angular/common";
 import {ClubItemComponent} from "./club-item/club-item.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-club-list',
@@ -17,7 +18,9 @@ import {ClubItemComponent} from "./club-item/club-item.component";
 export class ClubListComponent implements OnInit{
   clubs: ClubModel[] = [];
 
-  constructor(private clubService: ClubService) {
+  constructor(private clubService: ClubService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -28,5 +31,7 @@ export class ClubListComponent implements OnInit{
     //console.log(this.clubService.getClubs());
   }
 
-
+  onEdit(clubId: string | undefined) {
+    this.router.navigate([clubId + "/edit"], {relativeTo: this.activatedRoute})
+  }
 }

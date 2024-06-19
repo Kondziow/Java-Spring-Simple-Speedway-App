@@ -4,8 +4,15 @@
 
     <ul class="list-group">
       <li *ngFor="let clubItem of clubs"
-        class="list-group-item">
-        <app-club-item [club]="clubItem"></app-club-item>
+          class="list-group-item">
+        <div class="row d-flex align-items-center justify-content-between" style="width: 40vh">
+          <div class="col-xs-8">
+            <app-club-item [club]="clubItem"></app-club-item>
+          </div>
+          <div class="col-xs-2 text-right">
+            <button class="btn btn-info" (click)="onEdit(clubItem.id)">Edit</button>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
