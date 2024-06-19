@@ -15,7 +15,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './club-list.component.html',
   styleUrl: './club-list.component.css'
 })
-export class ClubListComponent implements OnInit{
+export class ClubListComponent implements OnInit {
   clubs: ClubModel[] = [];
 
   constructor(private clubService: ClubService,
@@ -25,10 +25,8 @@ export class ClubListComponent implements OnInit{
 
   ngOnInit(): void {
     this.clubService.getClubs().subscribe((response: any) => {
-      console.log(response);
       this.clubs = response.clubs;
     })
-    //console.log(this.clubService.getClubs());
   }
 
   onEdit(clubId: string | undefined) {
