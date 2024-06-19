@@ -6,7 +6,13 @@ import {ClubListComponent} from "./club/club-list/club-list.component";
 const routes: Routes = [
   {
     path: 'clubs',
-    component: ClubListComponent
+    component: ClubListComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'clubs/:id/edit',
+    component: ClubListComponent,
+    pathMatch: 'full'
   },
   {
     path: '',
