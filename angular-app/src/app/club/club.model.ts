@@ -1,6 +1,6 @@
 export class ClubModel {
-  constructor(public id: string,
-              public name: string,
-              public city: string) {
+  constructor(public name: string,
+              public city: string,
+              public id?: string) {
   }
 }
