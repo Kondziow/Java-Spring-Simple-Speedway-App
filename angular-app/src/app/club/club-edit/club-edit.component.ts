@@ -3,7 +3,6 @@ import {ClubModel} from "../club.model";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ClubService} from "../club.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {relative} from "@angular/compiler-cli";
 
 @Component({
   selector: 'app-club-edit',
@@ -28,14 +27,14 @@ export class ClubEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.url.subscribe(urlSegments => {
+    this.activatedRoute.url.subscribe(() => {
       this.clubId = this.activatedRoute.snapshot.params['id'];
       this.initForm();
     })
   }
 
   onSubmit() {
-    this.clubService.putClubById(this.club, this.clubId).subscribe(response => {
+    this.clubService.putClubById(this.club, this.clubId).subscribe(() => {
       this.goBack();
     })
   }
