@@ -10,7 +10,8 @@
             <app-club-item [club]="clubItem"></app-club-item>
           </div>
           <div class="col-xs-2 text-right">
-            <button class="btn btn-info" (click)="onEdit(clubItem.id)">Edit</button>
+            <button class="btn btn-info" (click)="onEdit(clubItem.id)">Edit</button> |
+            <button class="btn btn-danger" (click)="onDelete(clubItem.id)">Delete</button>
           </div>
         </div>
       </li>

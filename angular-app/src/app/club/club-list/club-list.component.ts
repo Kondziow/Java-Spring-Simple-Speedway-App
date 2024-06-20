@@ -24,12 +24,22 @@ export class ClubListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.clubService.getClubs().subscribe((response: any) => {
-      this.clubs = response.clubs;
+    this.getClubs();
+  }
+
+  onEdit(clubId: string) {
+    this.router.navigate([clubId + "/edit"], {relativeTo: this.activatedRoute})
+  }
+
+  onDelete(clubId: string) {
+    this.clubService.deleteClubById(clubId).subscribe(() => {
+      this.getClubs();
     })
   }
 
-  onEdit(clubId: string | undefined) {
-    this.router.navigate([clubId + "/edit"], {relativeTo: this.activatedRoute})
+  getClubs() {
+    this.clubService.getClubs().subscribe((response: any) => {
+      this.clubs = response.clubs;
+    })
   }
 }
