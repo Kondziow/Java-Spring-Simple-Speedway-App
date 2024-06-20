@@ -19,6 +19,11 @@ export class ClubService {
     return this.http.get<ClubModel>(url);
   }
 
+  postNewClub(club: ClubModel) {
+    const url = `${backendUrl}/clubs`;
+    return this.http.post<ClubModel>(url, club);
+  }
+
   putClubById(club: ClubModel, id:string) {
     const url = `${backendUrl}/clubs/${id}`;
     return this.http.put<ClubModel>(url, club);
