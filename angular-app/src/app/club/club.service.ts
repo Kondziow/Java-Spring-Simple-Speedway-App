@@ -23,4 +23,9 @@ export class ClubService {
     const url = `${backendUrl}/clubs/${id}`;
     return this.http.put<ClubModel>(url, club);
   }
+
+  deleteClubById(id: string) {
+    const url = `${backendUrl}/clubs/${id}`;
+    return this.http.delete(url);
+  }
 }
