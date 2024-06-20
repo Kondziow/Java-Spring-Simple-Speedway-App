@@ -15,7 +15,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class ClubEditComponent implements OnInit {
   clubId: string = '';
-  club: ClubModel = new ClubModel("name", "city");
+  club: ClubModel = new ClubModel('null',"name", "city");
   clubForm: FormGroup = new FormGroup({
     'name': new FormControl('', Validators.required),
     'city': new FormControl('', Validators.required)
