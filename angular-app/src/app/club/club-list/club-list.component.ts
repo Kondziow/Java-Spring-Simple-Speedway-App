@@ -27,6 +27,10 @@ export class ClubListComponent implements OnInit {
     this.getClubs();
   }
 
+  onNewClub() {
+    this.router.navigate(['new'], {relativeTo:this.activatedRoute})
+  }
+
   onEdit(clubId: string) {
     this.router.navigate([clubId + "/edit"], {relativeTo: this.activatedRoute})
   }
