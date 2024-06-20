@@ -11,6 +11,11 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'clubs/new',
+    component: ClubEditComponent,
+    pathMatch: 'full'
+  },
+  {
     path: 'clubs/:id/edit',
     component: ClubEditComponent,
     pathMatch: 'full'
