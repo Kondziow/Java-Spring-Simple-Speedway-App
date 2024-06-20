@@ -15,11 +15,12 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class ClubEditComponent implements OnInit {
   clubId: string = '';
-  club: ClubModel = new ClubModel('null',"name", "city");
+  club: ClubModel = new ClubModel('null', "name", "city");
   clubForm: FormGroup = new FormGroup({
     'name': new FormControl('', Validators.required),
     'city': new FormControl('', Validators.required)
   });
+  editMode: boolean = false;
 
   constructor(private clubService: ClubService,
               private activatedRoute: ActivatedRoute,
@@ -27,16 +28,30 @@ export class ClubEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.url.subscribe(() => {
-      this.clubId = this.activatedRoute.snapshot.params['id'];
-      this.initForm();
-    })
+    this.activatedRoute.url.subscribe(urlSegments => {
+      this.editMode = urlSegments.some(segment => segment.path === 'edit');
+    });
+
+    if (this.editMode) {
+      this.activatedRoute.url.subscribe(() => {
+        this.clubId = this.activatedRoute.snapshot.params['id'];
+        this.initForm();
+      })
+    }
+
   }
 
   onSubmit() {
-    this.clubService.putClubById(this.clubForm.value, this.clubId).subscribe(() => {
-      this.goBack();
-    })
+    if (this.editMode) {
+      this.clubService.putClubById(this.clubForm.value, this.clubId).subscribe(() => {
+        this.goBack();
+      })
+    } else {
+      this.clubService.postNewClub(this.clubForm.value).subscribe(() => {
+        this.goBack();
+      })
+    }
+
   }
 
   goBack() {
