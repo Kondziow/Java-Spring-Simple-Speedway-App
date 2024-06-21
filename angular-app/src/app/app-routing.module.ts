@@ -12,13 +12,13 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'clubs/:id',
-    component: ClubDetailsComponent,
+    path: 'clubs/new',
+    component: ClubEditComponent,
     pathMatch: 'full'
   },
   {
-    path: 'clubs/new',
-    component: ClubEditComponent,
+    path: 'clubs/:id',
+    component: ClubDetailsComponent,
     pathMatch: 'full'
   },
   {
