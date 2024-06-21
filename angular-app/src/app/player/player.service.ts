@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {backendUrl} from "../shared/http.config";
 import {ClubModel} from "../club/club.model";
-import {PlayerModel} from "./player.model";
+import {PlayerModel, PlayersResponse} from "./player.model";
 
 @Injectable({providedIn: 'root'})
 export class PlayerService {
@@ -11,6 +11,6 @@ export class PlayerService {
 
   getPlayersByClubId(clubId: string) {
     const url = `${backendUrl}/clubs/${clubId}/players`;
-    return this.http.get<PlayerModel[]>(url);
+    return this.http.get<PlayersResponse>(url);
   }
 }

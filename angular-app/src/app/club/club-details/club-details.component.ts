@@ -31,11 +31,9 @@ export class ClubDetailsComponent implements OnInit{
       this.clubId = params['id'];
       this.clubService.getClubById(this.clubId).subscribe(response => {
         this.club = response;
-        console.log(this.club)
       })
       this.playerService.getPlayersByClubId(this.clubId).subscribe(response => {
-        this.players = response;
-        console.log(this.players)
+        this.players = response.players;
       })
     })
   }

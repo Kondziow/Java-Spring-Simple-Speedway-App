@@ -5,3 +5,8 @@ export class PlayerModel {
               public birthDate: string) {
   }
 }
+
+export interface PlayersResponse {
+  players: PlayerModel[];
+}
+

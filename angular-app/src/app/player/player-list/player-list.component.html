@@ -1,1 +1,24 @@
-<p>player-list works!</p>
+<div class="row d-flex justify-content-center align-items-center">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3>Players</h3>
+      <button class="btn btn-success" >Add new player</button>
+    </div>
+
+    <ul class="list-group">
+      <li *ngFor="let playerItem of players" class="list-group-item col-12 mx-auto ">
+        <div class="d-flex align-items-center justify-content-between">
+          <div >
+            <app-player-item [player]="playerItem"></app-player-item>
+          </div>
+          <div class="text-right">
+            <button class="btn btn-info" >Details</button> |
+            <button class="btn btn-info" >Edit</button> |
+            <button class="btn btn-danger" >Delete</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+</div>
