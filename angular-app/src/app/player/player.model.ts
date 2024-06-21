@@ -8,13 +8,12 @@ export class PlayerModel {
 
 export class PostPlayerRequest extends PlayerModel {
   constructor(
-    id: string,
     name: string,
     surname: string,
     birthDate: string,
     public club: { id: string }
   ) {
-    super(id, name, surname, birthDate);
+    super('', name, surname, birthDate);
   }
 }
 
