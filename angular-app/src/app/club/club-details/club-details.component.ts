@@ -4,11 +4,14 @@ import {PlayerModel} from "../../player/player.model";
 import {ClubService} from "../club.service";
 import {PlayerService} from "../../player/player.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {PlayerListComponent} from "../../player/player-list/player-list.component";
 
 @Component({
   selector: 'app-club-details',
   standalone: true,
-  imports: [],
+  imports: [
+    PlayerListComponent
+  ],
   templateUrl: './club-details.component.html',
   styleUrl: './club-details.component.css'
 })
