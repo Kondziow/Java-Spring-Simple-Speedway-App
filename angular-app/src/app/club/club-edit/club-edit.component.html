@@ -4,7 +4,8 @@
       <form [formGroup]="clubForm" (ngSubmit)="onSubmit()">
         <div class="row">
           <div class="col-xs-12">
-            <h2>Edit club: {{club.name}} {{club.city}}</h2>
+            <h2 *ngIf="editMode">Edit club: {{club.name}} {{club.city}}</h2>
+            <h2 *ngIf="!editMode">Add new club</h2>
           </div>
         </div>
         <button

@@ -3,12 +3,14 @@ import {ClubModel} from "../club.model";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ClubService} from "../club.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-club-edit',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './club-edit.component.html',
   styleUrl: './club-edit.component.css'
