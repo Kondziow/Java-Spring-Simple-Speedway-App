@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {backendUrl} from "../shared/http.config";
-import {ClubModel} from "../club/club.model";
 import {PlayerModel, PlayersResponse, PostPlayerRequest} from "./player.model";
 
 @Injectable({providedIn: 'root'})
@@ -17,5 +16,10 @@ export class PlayerService {
   postNewPlayer(player: PostPlayerRequest) {
     const url = `${backendUrl}/players`;
     return this.http.post<PlayerModel>(url, player);
+  }
+
+  deletePlayerById(playerId: string) {
+    const url = `${backendUrl}/players/${playerId}`;
+    return this.http.delete(url);
   }
 }
