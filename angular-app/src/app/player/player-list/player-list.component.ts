@@ -3,6 +3,7 @@ import {ClubItemComponent} from "../../club/club-list/club-item/club-item.compon
 import {NgForOf} from "@angular/common";
 import {PlayerModel} from "../player.model";
 import {PlayerItemComponent} from "./player-item/player-item.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-player-list',
@@ -18,6 +19,12 @@ import {PlayerItemComponent} from "./player-item/player-item.component";
 export class PlayerListComponent {
   @Input() players?: PlayerModel[];
 
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute) {
+  }
 
+  onAddNewPlayer() {
+    this.router.navigate(['newPlayer'], {relativeTo: this.activatedRoute})
+  }
 
 }
