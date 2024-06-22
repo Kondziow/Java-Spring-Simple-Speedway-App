@@ -23,6 +23,11 @@ export class PlayerService {
     return this.http.post<PlayerModel>(url, player);
   }
 
+  putPlayerById(player: PostPlayerRequest, playerId: string) {
+    const url = `${backendUrl}/players/${playerId}`;
+    return this.http.put<PlayerModel>(url, player);
+  }
+
   deletePlayerById(playerId: string) {
     const url = `${backendUrl}/players/${playerId}`;
     return this.http.delete(url);
