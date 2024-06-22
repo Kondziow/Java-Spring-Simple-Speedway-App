@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import wojtanowski.konrad.playerapp.club.model.model.GetClubResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.PutPlayerRequest;
@@ -182,7 +183,8 @@ class PlayerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name", is(putPlayerRequest.getName())))
                 .andExpect(jsonPath("$.surname", is(putPlayerRequest.getSurname())))
-                .andExpect(jsonPath("$.birthDate", is(putPlayerRequest.getBirthDate().toString())));
+                .andExpect(jsonPath("$.birthDate", is(putPlayerRequest.getBirthDate().toString())))
+                .andExpect(jsonPath("$.club.id", is(putPlayerRequest.getClub().getId().toString())));
     }
 
     @Test
@@ -296,6 +298,7 @@ class PlayerControllerTest {
                 .name("PlayerName1")
                 .surname("PlayerSurname1")
                 .birthDate(LocalDate.of(2000, 10, 10))
+                .club(GetClubResponse.builder().id(getClubId()).build())
                 .build();
     }
 
@@ -304,6 +307,7 @@ class PlayerControllerTest {
                 .name("PlayerName1")
                 .surname("PlayerSurname1")
                 .birthDate(LocalDate.of(2000, 10, 10))
+                .club(GetClubResponse.builder().id(getClubId()).build())
                 .build();
     }
 
@@ -314,5 +318,9 @@ class PlayerControllerTest {
                 .surname("PlayerSurname2")
                 .birthDate(LocalDate.of(2001, 11, 11))
                 .build();
+    }
+
+    private UUID getClubId() {
+        return UUID.fromString("e5f60ac8-aa41-482a-936e-dc52f4258e9d");
     }
 }
