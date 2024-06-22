@@ -33,6 +33,11 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'clubs/:id/player/:playerId/edit',
+    component: PlayerEditComponent,
+    pathMatch: 'full'
+  },
+  {
     path: '',
     redirectTo: 'clubs', pathMatch: 'full'
   }
