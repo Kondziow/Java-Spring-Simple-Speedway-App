@@ -23,7 +23,7 @@ export class PlayerEditComponent implements OnInit {
   playerForm: FormGroup = new FormGroup({
     'name': new FormControl('', Validators.required),
     'surname': new FormControl('', Validators.required),
-    'birthDate': new FormControl('')
+    'birthDate': new FormControl('', [Validators.required, this.dateValidator])
   })
   editMode: boolean  = false;
 
@@ -100,4 +100,12 @@ export class PlayerEditComponent implements OnInit {
     })
   }
 
+  dateValidator(control: FormControl): { [key: string]: boolean } | null {
+    const value = control.value;
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (value && !dateRegex.test(value)) {
+      return { 'dateInvalid': true };
+    }
+    return null;
+  }
 }
