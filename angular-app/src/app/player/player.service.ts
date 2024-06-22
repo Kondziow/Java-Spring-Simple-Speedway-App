@@ -8,6 +8,11 @@ export class PlayerService {
   constructor(private http: HttpClient) {
   }
 
+  getPlayerById(playerId: string) {
+    const url = `${backendUrl}/players/${playerId}`;
+    return this.http.get<PlayerModel>(url);
+  }
+
   getPlayersByClubId(clubId: string) {
     const url = `${backendUrl}/clubs/${clubId}/players`;
     return this.http.get<PlayersResponse>(url);
