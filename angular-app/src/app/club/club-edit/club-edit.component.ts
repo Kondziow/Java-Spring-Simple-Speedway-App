@@ -57,7 +57,11 @@ export class ClubEditComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute})
+    if (this.editMode) {
+      this.router.navigate(['../..'], {relativeTo: this.activatedRoute})
+    } else {
+      this.router.navigate(['..'], {relativeTo: this.activatedRoute})
+    }
   }
 
   initForm() {
