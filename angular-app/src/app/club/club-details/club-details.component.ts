@@ -37,4 +37,8 @@ export class ClubDetailsComponent implements OnInit{
       })
     })
   }
+
+  onGoBack() {
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+  }
 }
