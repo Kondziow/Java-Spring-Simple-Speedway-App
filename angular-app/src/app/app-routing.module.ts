@@ -4,6 +4,7 @@ import {ClubListComponent} from "./club/club-list/club-list.component";
 import {ClubEditComponent} from "./club/club-edit/club-edit.component";
 import {ClubDetailsComponent} from "./club/club-details/club-details.component";
 import {PlayerEditComponent} from "./player/player-edit/player-edit.component";
+import {PlayerDetailsComponent} from "./player/player-details/player-details.component";
 
 
 const routes: Routes = [
@@ -25,6 +26,11 @@ const routes: Routes = [
   {
     path: 'clubs/:id/edit',
     component: ClubEditComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'clubs/:id/player/:playerId',
+    component: PlayerDetailsComponent,
     pathMatch: 'full'
   },
   {
