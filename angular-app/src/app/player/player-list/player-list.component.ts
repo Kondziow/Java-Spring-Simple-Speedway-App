@@ -5,6 +5,7 @@ import {PlayerModel} from "../player.model";
 import {PlayerItemComponent} from "./player-item/player-item.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PlayerService} from "../player.service";
+import {relative} from "@angular/compiler-cli";
 
 @Component({
   selector: 'app-player-list',
@@ -32,6 +33,10 @@ export class PlayerListComponent {
 
   onEdit(playerId: string) {
     this.router.navigate(['player/' + playerId + '/edit'], {relativeTo: this.activatedRoute})
+  }
+
+  onPlayerDetails(playerId: string) {
+    this.router.navigate(['player/' + playerId], {relativeTo: this.activatedRoute})
   }
 
   onDelete(id: string) {
