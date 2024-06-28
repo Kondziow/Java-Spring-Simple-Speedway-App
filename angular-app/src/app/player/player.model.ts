@@ -2,7 +2,8 @@ export class PlayerModel {
   constructor(public id: string,
               public name: string,
               public surname: string,
-              public birthDate: string) {
+              public birthDate: string,
+              public club?: { id: string }) {
   }
 }
 
@@ -11,9 +12,9 @@ export class PostPlayerRequest extends PlayerModel {
     name: string,
     surname: string,
     birthDate: string,
-    public club: { id: string }
+    club: { id: string }
   ) {
-    super('', name, surname, birthDate);
+    super('', name, surname, birthDate, club);
   }
 }
 
