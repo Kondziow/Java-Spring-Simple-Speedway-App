@@ -1,1 +1,8 @@
-<p>player-details works!</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>{{player.name}} {{player.surname}}</h1>
+  <button class="btn btn-dark" (click)="onGoBack()">Go back</button>
+</div>
+<div>
+  <h3>birthday: {{player.birthDate}}</h3>
+  <h3>club: {{club.name}} {{club.city}}</h3>
+</div>
