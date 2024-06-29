@@ -39,10 +39,12 @@ export class PlayerListComponent {
     this.router.navigate(['player/' + playerId], {relativeTo: this.activatedRoute})
   }
 
-  onDelete(id: string) {
-    this.playerService.deletePlayerById(id).subscribe(() => {
-      this.getPlayers();
-    })
+  onDelete(player: PlayerModel) {
+    if (confirm(`You are about to delete player ${player.name} ${player.surname}`)) {
+      this.playerService.deletePlayerById(player.id).subscribe(() => {
+        this.getPlayers();
+      })
+    }
   }
 
   getPlayers() {
