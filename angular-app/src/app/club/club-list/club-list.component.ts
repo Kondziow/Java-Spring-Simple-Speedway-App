@@ -39,10 +39,12 @@ export class ClubListComponent implements OnInit {
     this.router.navigate([clubId + "/edit"], {relativeTo: this.activatedRoute})
   }
 
-  onDelete(clubId: string) {
-    this.clubService.deleteClubById(clubId).subscribe(() => {
-      this.getClubs();
-    })
+  onDelete(club: ClubModel) {
+      if(confirm(`You are about to delete club ${club.name} ${club.city}`)) {
+      this.clubService.deleteClubById(club.id).subscribe(() => {
+        this.getClubs();
+      })
+    }
   }
 
   getClubs() {
