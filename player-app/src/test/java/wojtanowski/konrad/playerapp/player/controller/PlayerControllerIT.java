@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.server.ResponseStatusException;
 import wojtanowski.konrad.playerapp.club.model.entity.Club;
+import wojtanowski.konrad.playerapp.club.model.model.GetClubResponse;
 import wojtanowski.konrad.playerapp.club.repository.ClubRepository;
 import wojtanowski.konrad.playerapp.player.mapper.PlayerMapper;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
@@ -172,6 +173,7 @@ class PlayerControllerIT {
                 .name("UPDATED")
                 .surname(player.getSurname())
                 .birthDate(player.getBirthDate())
+                .club(GetClubResponse.builder().id(UUID.randomUUID()).build())
                 .build();
 
         ResponseEntity<GetPlayerResponse> responseEntity = playerController.putPlayerById(player.getId(), putPlayerRequest);
@@ -181,6 +183,7 @@ class PlayerControllerIT {
         assertThat(updatedPlayer.getName()).isEqualTo("UPDATED");
         assertThat(updatedPlayer.getSurname()).isEqualTo(player.getSurname());
         assertThat(updatedPlayer.getBirthDate()).isEqualTo(player.getBirthDate());
+        assertThat(updatedPlayer.getClub().getId()).isEqualTo(player.getClub().getId());
     }
 
     @Test

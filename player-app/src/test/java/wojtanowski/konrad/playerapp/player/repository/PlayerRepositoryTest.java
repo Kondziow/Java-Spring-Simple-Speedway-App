@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -124,10 +124,13 @@ class PlayerRepositoryTest {
 
     @Test
     void testUpdatePlayer() {
+        Club club = clubRepository.findAll().get(0);
+
         Player player = Player.builder()
                 .name("n")
                 .surname("s")
                 .birthDate(LocalDate.of(2000, 10, 10))
+                .club(Club.builder().id(club.getId()).build())
                 .build();
 
         Player saved = playerRepository.save(player);
@@ -142,6 +145,7 @@ class PlayerRepositoryTest {
         assertThat(updated.getName()).isEqualTo("UPDATED");
         assertThat(updated.getSurname()).isEqualTo(player.getSurname());
         assertThat(updated.getBirthDate()).isEqualTo(player.getBirthDate());
+        assertThat(updated.getClub().getId()).isEqualTo(player.getClub().getId());
     }
 
     @Test

@@ -1,0 +1,5 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>{{club?.name}} {{club?.city}}</h1>
+  <button class="btn btn-dark" (click)="onGoBack()">Go back</button>
+</div>
+<app-player-list [players]="players" [clubId]="clubId"></app-player-list>
