@@ -5,6 +5,7 @@ import com.wojtanowski.konrad.clubapp.club.model.dto.GetClubsResponse;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PostClubRequest;
 import com.wojtanowski.konrad.clubapp.club.model.dto.PutClubRequest;
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,4 +20,8 @@ public interface ClubService {
     Optional<GetClubResponse> updateClubById(UUID clubId, @Valid PutClubRequest club);
 
     Boolean deleteClubById(UUID clubId);
+
+    byte[] getClubImage(UUID clubId);
+
+    void saveClubImage(UUID clubId, MultipartFile file);
 }

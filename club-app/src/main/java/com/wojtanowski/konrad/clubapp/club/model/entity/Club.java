@@ -30,9 +30,13 @@ public class Club {
     @Size(max = 25)
     private String city;
 
-    public Club(final UUID id, final String name, final String city) {
+    @Lob
+    private byte[] image;
+
+    public Club(final UUID id, final String name, final String city, final byte[] image) {
         this.id = Objects.requireNonNullElseGet(id, UUID::randomUUID);
         this.name = name;
         this.city = city;
+        this.image = image;
     }
 }
