@@ -40,11 +40,15 @@ public class Player {
     @JoinColumn(name = "club_id")
     private Club club;
 
-    public Player(final UUID id, final String name, final String surname, final LocalDate birthDate, final Club club) {
+    @Lob
+    private byte[] image;
+
+    public Player(final UUID id, final String name, final String surname, final LocalDate birthDate, final Club club, final byte[] image) {
         this.id = Objects.requireNonNullElseGet(id, UUID::randomUUID);
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
         this.club = club;
+        this.image = image;
     }
 }

@@ -1,11 +1,14 @@
 package wojtanowski.konrad.playerapp.player.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import wojtanowski.konrad.playerapp.club.controller.ClubController;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
@@ -23,6 +26,7 @@ public class PlayerController {
     public static final String PLAYER_PATH = "/api/v1/players";
     public static final String PLAYER_PATH_ID = PLAYER_PATH + "/{playerId}";
     public static final String CLUB_PATH_ID_PLAYERS = ClubController.CLUB_PATH_ID + "/players";
+    public static final String PLAYER_IMAGE_PATH = PLAYER_PATH_ID + "/image";
 
     private final PlayerService playerService;
 
@@ -80,5 +84,35 @@ public class PlayerController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(value = PLAYER_IMAGE_PATH, produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<ByteArrayResource> getPlayerImage(@PathVariable("playerId") UUID playerId) {
+        byte[] image = playerService.getPlayerImage(playerId);
+
+        if (image == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ByteArrayResource resource = new ByteArrayResource(image);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentLength(image.length);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
+    @PostMapping(PLAYER_IMAGE_PATH)
+    public ResponseEntity<Void> uploadPlayerImage(
+            @PathVariable("playerId") UUID playerId,
+            @RequestParam("file") MultipartFile file
+    ) {
+        try {
+            playerService.savePlayerImage(playerId, file);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to upload image", e);
+        }
     }
 }

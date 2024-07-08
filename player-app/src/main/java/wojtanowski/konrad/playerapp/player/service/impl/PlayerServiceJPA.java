@@ -2,8 +2,11 @@ package wojtanowski.konrad.playerapp.player.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import wojtanowski.konrad.playerapp.player.mapper.PlayerMapper;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
@@ -13,6 +16,7 @@ import wojtanowski.konrad.playerapp.player.model.entity.Player;
 import wojtanowski.konrad.playerapp.player.repository.PlayerRepository;
 import wojtanowski.konrad.playerapp.player.service.api.PlayerService;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -78,5 +82,34 @@ public class PlayerServiceJPA implements PlayerService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public byte[] getPlayerImage(UUID playerId) {
+        Optional<Player> playerOptional = playerRepository.findById(playerId);
+
+        if (playerOptional.isPresent()) {
+            Player player = playerOptional.get();
+            return player.getImage();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
+        }
+    }
+
+    @Override
+    public void savePlayerImage(UUID playerId, MultipartFile file) {
+        Optional<Player> playerOptional = playerRepository.findById(playerId);
+
+        if (playerOptional.isPresent()) {
+            Player player = playerOptional.get();
+            try {
+                player.setImage(file.getBytes());
+                playerRepository.save(player);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to store image file", e);
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
+        }
     }
 }
