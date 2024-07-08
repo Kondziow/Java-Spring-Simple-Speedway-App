@@ -11,6 +11,7 @@ import com.wojtanowski.konrad.clubapp.club.repository.ClubRepository;
 import com.wojtanowski.konrad.clubapp.club.service.api.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -83,26 +84,28 @@ public class ClubServiceJPA implements ClubService {
     }
 
     @Override
-    public byte[] getClubImage(UUID clubId) {
+    public ByteArrayResource getClubImage(UUID clubId) {
         Optional<Club> clubOptional = clubRepository.findById(clubId);
 
         if (clubOptional.isPresent()) {
             Club club = clubOptional.get();
-            return club.getImage();
+            byte[] image = club.getImage();
+            return new ByteArrayResource(image);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Club not found");
         }
     }
 
     @Override
-    public void saveClubImage(UUID clubId, MultipartFile file) {
+    public ByteArrayResource saveClubImage(UUID clubId, MultipartFile file) {
         Optional<Club> clubOptional = clubRepository.findById(clubId);
 
         if (clubOptional.isPresent()) {
             Club club = clubOptional.get();
             try {
                 club.setImage(file.getBytes());
-                clubRepository.save(club);
+                Club newClub = clubRepository.save(club);
+                return new ByteArrayResource(newClub.getImage());
             } catch (IOException e) {
                 throw new RuntimeException("Failed to store image file", e);
             }

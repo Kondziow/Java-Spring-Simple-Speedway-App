@@ -81,29 +81,30 @@ public class ClubController {
 
     @GetMapping(value = CLUB_IMAGE_PATH, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<ByteArrayResource> getClubImage(@PathVariable("clubId") UUID clubId) {
-        byte[] image = clubService.getClubImage(clubId);
+        ByteArrayResource image = clubService.getClubImage(clubId);
 
         if (image == null) {
             return ResponseEntity.notFound().build();
         }
 
-        ByteArrayResource resource = new ByteArrayResource(image);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
-        headers.setContentLength(image.length);
 
-        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
 
     @PostMapping(CLUB_IMAGE_PATH)
-    public ResponseEntity<Void> uploadClubImage(
+    public ResponseEntity<ByteArrayResource> uploadClubImage(
             @PathVariable("clubId") UUID clubId,
             @RequestParam("file") MultipartFile file
     ) {
         try {
-            clubService.saveClubImage(clubId, file);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            ByteArrayResource image = clubService.saveClubImage(clubId, file);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+
+            return new ResponseEntity<>(image, headers, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to upload image", e);
         }
