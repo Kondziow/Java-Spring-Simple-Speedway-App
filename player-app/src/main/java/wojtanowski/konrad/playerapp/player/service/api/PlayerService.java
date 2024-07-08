@@ -1,6 +1,7 @@
 package wojtanowski.konrad.playerapp.player.service.api;
 
 import jakarta.validation.Valid;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.multipart.MultipartFile;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayersResponse;
@@ -23,7 +24,7 @@ public interface PlayerService {
 
     Boolean deletePlayerById(UUID playerId);
 
-    byte[] getPlayerImage(UUID clubId);
+    ByteArrayResource getPlayerImage(UUID clubId);
 
-    void savePlayerImage(UUID clubId, MultipartFile file);
+    ByteArrayResource savePlayerImage(UUID clubId, MultipartFile file);
 }

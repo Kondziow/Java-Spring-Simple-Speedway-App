@@ -2,6 +2,7 @@ package wojtanowski.konrad.playerapp.player.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -85,26 +86,28 @@ public class PlayerServiceJPA implements PlayerService {
     }
 
     @Override
-    public byte[] getPlayerImage(UUID playerId) {
+    public ByteArrayResource getPlayerImage(UUID playerId) {
         Optional<Player> playerOptional = playerRepository.findById(playerId);
 
         if (playerOptional.isPresent()) {
             Player player = playerOptional.get();
-            return player.getImage();
+            byte[] image = player.getImage();
+            return new ByteArrayResource(image);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
         }
     }
 
     @Override
-    public void savePlayerImage(UUID playerId, MultipartFile file) {
+    public ByteArrayResource savePlayerImage(UUID playerId, MultipartFile file) {
         Optional<Player> playerOptional = playerRepository.findById(playerId);
 
         if (playerOptional.isPresent()) {
             Player player = playerOptional.get();
             try {
                 player.setImage(file.getBytes());
-                playerRepository.save(player);
+                Player newPlayer = playerRepository.save(player);
+                return new ByteArrayResource(newPlayer.getImage());
             } catch (IOException e) {
                 throw new RuntimeException("Failed to store image file", e);
             }

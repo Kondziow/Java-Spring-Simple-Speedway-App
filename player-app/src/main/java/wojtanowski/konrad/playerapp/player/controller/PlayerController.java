@@ -88,29 +88,30 @@ public class PlayerController {
 
     @GetMapping(value = PLAYER_IMAGE_PATH, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<ByteArrayResource> getPlayerImage(@PathVariable("playerId") UUID playerId) {
-        byte[] image = playerService.getPlayerImage(playerId);
+        ByteArrayResource image = playerService.getPlayerImage(playerId);
 
         if (image == null) {
             return ResponseEntity.notFound().build();
         }
 
-        ByteArrayResource resource = new ByteArrayResource(image);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
-        headers.setContentLength(image.length);
 
-        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
 
     @PostMapping(PLAYER_IMAGE_PATH)
-    public ResponseEntity<Void> uploadPlayerImage(
+    public ResponseEntity<ByteArrayResource> uploadPlayerImage(
             @PathVariable("playerId") UUID playerId,
             @RequestParam("file") MultipartFile file
     ) {
         try {
-            playerService.savePlayerImage(playerId, file);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            ByteArrayResource image = playerService.savePlayerImage(playerId, file);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+
+            return new ResponseEntity<>(image, headers, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to upload image", e);
         }
