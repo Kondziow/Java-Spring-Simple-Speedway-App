@@ -12,7 +12,10 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -249,6 +252,49 @@ class ClubControllerTest {
         mockMvc.perform(delete(ClubController.CLUB_PATH_ID, UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetClubImage() throws Exception {
+        byte[] imageBytes = "test".getBytes();
+        ByteArrayResource imageResource = new ByteArrayResource(imageBytes);
+
+        given(clubService.getClubImage(any(UUID.class))).willReturn(imageResource);
+
+        mockMvc.perform(get(ClubController.CLUB_IMAGE_PATH, UUID.randomUUID())
+                        .accept(MediaType.IMAGE_JPEG_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_JPEG_VALUE))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE));
+    }
+
+    @Test
+    void testGetClubImageNotFound() throws Exception {
+        given(clubService.getClubImage(any(UUID.class))).willReturn(null);
+
+        mockMvc.perform(get(ClubController.CLUB_IMAGE_PATH, UUID.randomUUID())
+                        .accept(MediaType.IMAGE_JPEG_VALUE))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testUploadClubImage() throws Exception {
+        UUID clubId = UUID.randomUUID();
+        byte[] imageBytes = "test".getBytes();
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, imageBytes);
+
+        ByteArrayResource imageResource = new ByteArrayResource(imageBytes);
+        given(clubService.saveClubImage(any(UUID.class), any(MockMultipartFile.class))).willReturn(imageResource);
+
+        mockMvc.perform(multipart(ClubController.CLUB_IMAGE_PATH, clubId)
+                        .file(file)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_JPEG_VALUE))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE));
+
+        verify(clubService).saveClubImage(uuidArgumentCaptor.capture(), any(MockMultipartFile.class));
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(clubId);
     }
 
     private Club getClub1() {

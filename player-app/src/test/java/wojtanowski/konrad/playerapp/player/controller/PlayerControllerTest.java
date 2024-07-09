@@ -7,7 +7,10 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import wojtanowski.konrad.playerapp.club.model.model.GetClubResponse;
 import wojtanowski.konrad.playerapp.player.model.dto.GetPlayerResponse;
@@ -281,6 +284,49 @@ class PlayerControllerTest {
         mockMvc.perform(delete(PlayerController.PLAYER_PATH_ID, UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetPlayerImage() throws Exception {
+        byte[] imageBytes = "test".getBytes();
+        ByteArrayResource imageResource = new ByteArrayResource(imageBytes);
+
+        given(playerService.getPlayerImage(any(UUID.class))).willReturn(imageResource);
+
+        mockMvc.perform(get(PlayerController.PLAYER_IMAGE_PATH, UUID.randomUUID())
+                        .accept(MediaType.IMAGE_JPEG_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_JPEG_VALUE))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE));
+    }
+
+    @Test
+    void testGetPlayerImageNotFound() throws Exception {
+        given(playerService.getPlayerImage(any(UUID.class))).willReturn(null);
+
+        mockMvc.perform(get(PlayerController.PLAYER_IMAGE_PATH, UUID.randomUUID())
+                        .accept(MediaType.IMAGE_JPEG_VALUE))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testUploadPlayerImage() throws Exception {
+        UUID playerId = UUID.randomUUID();
+        byte[] imageBytes = "test".getBytes();
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, imageBytes);
+
+        ByteArrayResource imageResource = new ByteArrayResource(imageBytes);
+        given(playerService.savePlayerImage(any(UUID.class), any(MockMultipartFile.class))).willReturn(imageResource);
+
+        mockMvc.perform(multipart(PlayerController.PLAYER_IMAGE_PATH, playerId)
+                        .file(file)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_JPEG_VALUE))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE));
+
+        verify(playerService).savePlayerImage(uuidArgumentCaptor.capture(), any(MockMultipartFile.class));
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(playerId);
     }
 
     private Player getPlayer1() {
