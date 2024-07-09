@@ -6,8 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -258,5 +261,50 @@ class PlayerControllerIT {
     @Test
     void testDeletePlayerByIdNotFound() {
         assertThrows(ResponseStatusException.class, () -> playerController.deletePlayerById(UUID.randomUUID()));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testGetPlayerImage() {
+        Player player = playerRepository.findAll().get(0);
+        UUID playerId = player.getId();
+
+        byte[] imageBytes = "test".getBytes();
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, imageBytes);
+
+        playerController.uploadPlayerImage(playerId, file);
+
+        ResponseEntity<ByteArrayResource> response = playerController.getPlayerImage(playerId);
+
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getByteArray()).isEqualTo(imageBytes);
+    }
+
+    @Test
+    void testGetPlayerImageAndImageNotFound() {
+        Player player = playerRepository.findAll().get(0);
+        UUID playerId = player.getId();
+
+        assertThrows(IllegalArgumentException.class, () -> playerController.getPlayerImage(playerId));
+    }
+
+    @Test
+    void testGetPlayerImageAndPlayerNotFound() {
+        assertThrows(ResponseStatusException.class, () -> playerController.getPlayerImage(UUID.randomUUID()));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testUploadPlayerImage() {
+        Player player = playerRepository.findAll().get(0);
+        byte[] imageBytes = "test".getBytes();
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, imageBytes);
+
+        ResponseEntity<ByteArrayResource> response = playerController.uploadPlayerImage(player.getId(), file);
+
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getByteArray()).isEqualTo(imageBytes);
     }
 }

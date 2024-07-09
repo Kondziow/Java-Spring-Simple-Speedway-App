@@ -14,8 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -210,5 +213,50 @@ class ClubControllerIT {
     @Test
     void testDeleteClubByIdNotFound() {
         assertThrows(ResponseStatusException.class, () -> clubController.deleteClubById(UUID.randomUUID()));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testGetClubImage() {
+        Club club = clubRepository.findAll().get(0);
+        UUID clubId = club.getId();
+
+        byte[] imageBytes = "test".getBytes();
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, imageBytes);
+
+        clubController.uploadClubImage(clubId, file);
+
+        ResponseEntity<ByteArrayResource> response = clubController.getClubImage(clubId);
+
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getByteArray()).isEqualTo(imageBytes);
+    }
+
+    @Test
+    void testGetClubImageAndImageNotFound() {
+        Club club = clubRepository.findAll().get(0);
+        UUID clubId = club.getId();
+
+        assertThrows(IllegalArgumentException.class, () -> clubController.getClubImage(clubId));
+    }
+
+    @Test
+    void testGetClubImageAndClubNotFound() {
+        assertThrows(ResponseStatusException.class, () -> clubController.getClubImage(UUID.randomUUID()));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testUploadClubImage() {
+        Club club = clubRepository.findAll().get(0);
+        byte[] imageBytes = "test".getBytes();
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, imageBytes);
+
+        ResponseEntity<ByteArrayResource> response = clubController.uploadClubImage(club.getId(), file);
+
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getByteArray()).isEqualTo(imageBytes);
     }
 }
